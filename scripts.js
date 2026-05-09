@@ -414,15 +414,15 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function spawnBubbles(cx, cy) {
-    const COUNT = 14;
+    const COUNT = 18;
     for (let i = 0; i < COUNT; i++) {
       const el = document.createElement('div');
       el.className = 'bubble-particle';
-      const size = 10 + Math.random() * 22;
-      const xOff = (Math.random() - 0.5) * 140;
-      const rise = 140 + Math.random() * 120;
-      const dur  = 0.9 + Math.random() * 0.7;
-      const delay = Math.random() * 0.3;
+      const size = 10 + Math.random() * 24;
+      const xOff = (Math.random() - 0.5) * 200;
+      const rise = cy * (0.85 + Math.random() * 0.35); // reaches top of page
+      const dur  = 1.8 + Math.random() * 0.9;
+      const delay = Math.random() * 0.35;
       el.style.cssText = `
         width:${size}px; height:${size}px;
         left:${cx + xOff - size / 2}px;
@@ -440,21 +440,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function spawnLightning(cx, cy) {
-    const COUNT = 7;
+    const COUNT = 10;
+    const pageBottom = window.innerHeight;
     for (let i = 0; i < COUNT; i++) {
       const el = document.createElement('div');
       el.className = 'lightning-particle';
       const height = 60 + Math.random() * 80;
-      const xOff   = (Math.random() - 0.5) * 160;
-      const drop   = 120 + Math.random() * 100;
-      const dur    = 0.4 + Math.random() * 0.35;
-      const delay  = Math.random() * 0.25;
-      const skew   = (Math.random() - 0.5) * 18;
+      const xOff   = (Math.random() - 0.5) * 200;
+      const drop   = (pageBottom - cy) * (0.85 + Math.random() * 0.35); // reaches bottom
+      const dur    = 1.0 + Math.random() * 0.6;
+      const delay  = Math.random() * 0.3;
       el.style.cssText = `
         height:${height}px;
         left:${cx + xOff}px;
         top:${cy}px;
-        transform: skewX(${skew}deg) scaleY(0);
         --drop:${drop}px;
         --dur:${dur}s;
         animation-delay:${delay}s;

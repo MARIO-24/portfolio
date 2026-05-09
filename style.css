@@ -242,7 +242,7 @@ button { font-family: inherit; }
 .hero-img {
   width: 260px; height: 260px; border-radius: 50%;
   object-fit: cover; border: 3px solid var(--border);
-  position: relative; z-index: 1;
+  position: relative; z-index: 10000;
   box-shadow: 0 0 0 8px rgba(108,99,255,0.08);
   cursor: pointer;
   transition: transform 0.18s ease;
