@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
           makeBolt(svg, brPts, 'rgba(210,195,255,0.8)', 1.5, null);
         }
 
-        wrap.appendChild(svg);
+        document.body.appendChild(svg);
         svg.addEventListener('animationend', () => svg.remove());
       }, bDelay);
     }
