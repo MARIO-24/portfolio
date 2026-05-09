@@ -87,6 +87,9 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
   const eHandlerRef = useRef(null);
   const modalOpenRef = useRef(false);
   const onCloseRef = useRef(null);
+  // Cached vectors — evitan allocar new THREE.Vector3 cada frame (causa GC parones)
+  const _camTarget = useRef(new THREE.Vector3());
+  const _lookAt    = useRef(new THREE.Vector3());
   modalOpenRef.current = modalOpen;
   onCloseRef.current = onClose;
 
@@ -160,14 +163,14 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
       charRef.current.rotation.y += (charRotY.current - charRef.current.rotation.y) * 0.2;
     }
 
-    const camTarget = new THREE.Vector3(
+    _camTarget.current.set(
       charPos.current.x + 5,
       charPos.current.y + 9,
       charPos.current.z + 8
     );
-    camera.position.lerp(camTarget, 0.04);
-    const lookAt = new THREE.Vector3(charPos.current.x, charPos.current.y + 1, charPos.current.z);
-    camera.lookAt(lookAt);
+    camera.position.lerp(_camTarget.current, 0.04);
+    _lookAt.current.set(charPos.current.x, charPos.current.y + 1, charPos.current.z);
+    camera.lookAt(_lookAt.current);
   });
 
   const lightColor      = dark ? '#aabbff' : '#fffbe6';
@@ -178,26 +181,25 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
   return (
     <>
       <ambientLight intensity={ambientIntensity} />
+      {/* Una sola luz con sombras — shadow map 1024 (mitad de VRAM) */}
       <directionalLight
         position={[4, 10, 6]}
         intensity={dirIntensity}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.5}
-        shadow-camera-far={50}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
+        shadow-camera-far={40}
+        shadow-camera-left={-9}
+        shadow-camera-right={9}
+        shadow-camera-top={9}
+        shadow-camera-bottom={-9}
       />
-      <pointLight position={[0, 3.6, 0]} intensity={pointIntensity} color={lightColor} castShadow />
-      <pointLight position={[-4, 2, -3]} intensity={dark ? 0.5 : 0.2} color={dark ? '#4466cc' : '#ffcc88'} />
-      {/* Luz que entra por la ventana */}
-      <pointLight position={[2.0, 2.4, -3.8]} intensity={dark ? 0.4 : 0.8} color={dark ? '#1a2a66' : '#d4eeff'} />
-      {/* Bombilla colgante — ilumina la habitacion en modo oscuro */}
-      {dark && <pointLight position={[0, 3.0, 0]} intensity={2.2} color="#ffcc77" distance={9} decay={1.8} castShadow />}
-      {/* Brillo pantalla PC ilumina la zona de la mesa */}
-      {dark && <pointLight position={[-0.3, 1.5, -3.2]} intensity={0.6} color="#4488ff" distance={3} decay={2} />}
+      {/* Luz de ambiente cálida — sin sombras */}
+      <pointLight position={[0, 3.6, 0]} intensity={pointIntensity} color={lightColor} />
+      {/* Luz ventana — solo en modo claro */}
+      {!dark && <pointLight position={[2.0, 2.4, -3.8]} intensity={0.6} color="#d4eeff" />}
+      {/* Modo oscuro: luz cálida general */}
+      {dark && <pointLight position={[0, 2.0, 0]} intensity={1.8} color="#ffcc77" distance={12} decay={1.5} />}
 
       <Room dark={dark} />
       <Character charRef={charRef} dark={dark} lang={lang} outfit={outfit} walkT={walkT} />

@@ -53,11 +53,11 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
             <boxGeometry args={[0.18, 0.34, 0.18]} />
             <meshStandardMaterial color={pants} roughness={0.9} />
           </mesh>
-          <mesh position={[0, -0.44, 0]} castShadow>
+          <mesh position={[0, -0.44, 0]}>
             <boxGeometry args={[0.15, 0.28, 0.15]} />
             <meshStandardMaterial color={pants} roughness={0.9} />
           </mesh>
-          <mesh position={[0.01, -0.64, 0.03]} castShadow>
+          <mesh position={[0.01, -0.64, 0.03]}>
             <boxGeometry args={[0.17, 0.12, 0.26]} />
             <meshStandardMaterial color={shoes} roughness={0.8} />
           </mesh>
@@ -68,11 +68,11 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
             <boxGeometry args={[0.18, 0.34, 0.18]} />
             <meshStandardMaterial color={pants} roughness={0.9} />
           </mesh>
-          <mesh position={[0, -0.44, 0]} castShadow>
+          <mesh position={[0, -0.44, 0]}>
             <boxGeometry args={[0.15, 0.28, 0.15]} />
             <meshStandardMaterial color={pants} roughness={0.9} />
           </mesh>
-          <mesh position={[0.01, -0.64, 0.03]} castShadow>
+          <mesh position={[0.01, -0.64, 0.03]}>
             <boxGeometry args={[0.17, 0.12, 0.26]} />
             <meshStandardMaterial color={shoes} roughness={0.8} />
           </mesh>
@@ -89,37 +89,37 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
           <meshStandardMaterial color="#0d0d0d" roughness={0.6} />
         </mesh>
         {/* Cuello */}
-        <mesh position={[0, 1.42, 0]} castShadow>
+        <mesh position={[0, 1.42, 0]}>
           <boxGeometry args={[0.16, 0.10, 0.17]} />
           <meshStandardMaterial color={skin} roughness={0.8} />
         </mesh>
 
         {/* BRAZOS */}
         <group ref={leftArmRef} position={[-0.31, 1.28, 0]}>
-          <mesh position={[0, -0.14, 0]} castShadow>
+          <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[0.16, 0.38, 0.16]} />
             <meshStandardMaterial color={shirt} roughness={0.85} />
           </mesh>
-          <mesh position={[0, -0.41, 0]} castShadow>
+          <mesh position={[0, -0.41, 0]}>
             <boxGeometry args={[0.13, 0.26, 0.13]} />
             <meshStandardMaterial color={skin} roughness={0.8} />
           </mesh>
-          <mesh position={[0, -0.58, 0.01]} castShadow>
+          <mesh position={[0, -0.58, 0.01]}>
             <boxGeometry args={[0.14, 0.10, 0.16]} />
             <meshStandardMaterial color={skin} roughness={0.8} />
           </mesh>
         </group>
 
         <group ref={rightArmRef} position={[0.31, 1.28, 0]}>
-          <mesh position={[0, -0.14, 0]} castShadow>
+          <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[0.16, 0.38, 0.16]} />
             <meshStandardMaterial color={shirt} roughness={0.85} />
           </mesh>
-          <mesh position={[0, -0.41, 0]} castShadow>
+          <mesh position={[0, -0.41, 0]}>
             <boxGeometry args={[0.13, 0.26, 0.13]} />
             <meshStandardMaterial color={skin} roughness={0.8} />
           </mesh>
-          <mesh position={[0, -0.58, 0.01]} castShadow>
+          <mesh position={[0, -0.58, 0.01]}>
             <boxGeometry args={[0.14, 0.10, 0.16]} />
             <meshStandardMaterial color={skin} roughness={0.8} />
           </mesh>
@@ -138,36 +138,36 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
 
         {/* PELO */}
         {/* Base superior */}
-        <mesh position={[0, 1.96, 0]} castShadow>
+        <mesh position={[0, 1.96, 0]}>
           <boxGeometry args={[0.46, 0.08, 0.42]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
         {/* Volumen despeinado */}
-        <mesh position={[-0.04, 2.04, -0.02]} castShadow>
+        <mesh position={[-0.04, 2.04, -0.02]}>
           <boxGeometry args={[0.42, 0.12, 0.36]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
         {/* Flequillo */}
-        <mesh position={[-0.05, 1.93, 0.21]} castShadow>
+        <mesh position={[-0.05, 1.93, 0.21]}>
           <boxGeometry args={[0.28, 0.09, 0.06]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
-        <mesh position={[0.1, 1.90, 0.22]} castShadow>
+        <mesh position={[0.1, 1.90, 0.22]}>
           <boxGeometry args={[0.12, 0.12, 0.05]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
         {/* Lateral izquierdo */}
-        <mesh position={[-0.235, 1.78, -0.01]} castShadow>
+        <mesh position={[-0.235, 1.78, -0.01]}>
           <boxGeometry args={[0.04, 0.22, 0.36]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
         {/* Lateral derecho */}
-        <mesh position={[0.235, 1.78, -0.01]} castShadow>
+        <mesh position={[0.235, 1.78, -0.01]}>
           <boxGeometry args={[0.04, 0.22, 0.36]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
         {/* Nuca */}
-        <mesh position={[0, 1.80, -0.22]} castShadow>
+        <mesh position={[0, 1.80, -0.22]}>
           <boxGeometry args={[0.44, 0.28, 0.04]} />
           <meshStandardMaterial color={hair} roughness={0.9} />
         </mesh>
@@ -226,7 +226,7 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
 
         {/* AURICULARES GAMING */}
         {/* Banda superior */}
-        <mesh position={[0, 2.10, 0]} castShadow>
+        <mesh position={[0, 2.10, 0]}>
           <boxGeometry args={[0.54, 0.07, 0.07]} />
           <meshStandardMaterial color={hp} roughness={0.4} metalness={0.4} />
         </mesh>
@@ -236,17 +236,17 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
           <meshStandardMaterial color="#2a2a2a" roughness={0.9} />
         </mesh>
         {/* Brazo izquierdo */}
-        <mesh position={[-0.268, 1.945, 0]} castShadow>
+        <mesh position={[-0.268, 1.945, 0]}>
           <boxGeometry args={[0.05, 0.32, 0.05]} />
           <meshStandardMaterial color={hp} roughness={0.4} metalness={0.4} />
         </mesh>
         {/* Brazo derecho */}
-        <mesh position={[0.268, 1.945, 0]} castShadow>
+        <mesh position={[0.268, 1.945, 0]}>
           <boxGeometry args={[0.05, 0.32, 0.05]} />
           <meshStandardMaterial color={hp} roughness={0.4} metalness={0.4} />
         </mesh>
         {/* Copa izquierda */}
-        <mesh position={[-0.295, 1.74, 0]} castShadow>
+        <mesh position={[-0.295, 1.74, 0]}>
           <boxGeometry args={[0.08, 0.22, 0.22]} />
           <meshStandardMaterial color={hp} roughness={0.4} metalness={0.3} />
         </mesh>
@@ -256,7 +256,7 @@ export function Character({ charRef, dark, lang, outfit, walkT }) {
           <meshStandardMaterial color={hpPad} roughness={0.95} />
         </mesh>
         {/* Copa derecha */}
-        <mesh position={[0.295, 1.74, 0]} castShadow>
+        <mesh position={[0.295, 1.74, 0]}>
           <boxGeometry args={[0.08, 0.22, 0.22]} />
           <meshStandardMaterial color={hp} roughness={0.4} metalness={0.3} />
         </mesh>

@@ -202,7 +202,7 @@ export function Room({ dark }) {
       </mesh>
       {/* Cono volteado — interior blanco cálido */}
       <mesh position={[-4.7, 2.40, -3.7]}>
-        <cylinderGeometry args={[0.074, 0.37, 0.33, 24, 1, true]} />
+        <cylinderGeometry args={[0.074, 0.37, 0.33, 12, 1, true]} />
         <meshStandardMaterial
           color={dark ? '#fff8d0' : '#fffff8'}
           emissive={dark ? '#ffeebb' : '#fffce0'}
@@ -212,30 +212,22 @@ export function Room({ dark }) {
       </mesh>
       {/* Aro inferior del cono */}
       <mesh position={[-4.7, 2.225, -3.7]}>
-        <cylinderGeometry args={[0.386, 0.386, 0.018, 24]} />
+        <cylinderGeometry args={[0.386, 0.386, 0.018, 12]} />
         <meshStandardMaterial color={dark ? '#555' : '#c0c0c0'} metalness={0.8} roughness={0.15} />
       </mesh>
       {/* Aro superior del cono */}
       <mesh position={[-4.7, 2.573, -3.7]}>
-        <cylinderGeometry args={[0.086, 0.086, 0.018, 16]} />
+        <cylinderGeometry args={[0.086, 0.086, 0.018, 8]} />
         <meshStandardMaterial color={dark ? '#555' : '#c0c0c0'} metalness={0.8} roughness={0.15} />
       </mesh>
       {/* Tapa plana superior */}
       <mesh position={[-4.7, 2.582, -3.7]}>
-        <cylinderGeometry args={[0.085, 0.085, 0.012, 16]} />
+        <cylinderGeometry args={[0.085, 0.085, 0.012, 8]} />
         <meshStandardMaterial color={dark ? '#6a4a10' : '#c8a840'} roughness={0.7} />
       </mesh>
-      {/* Luz puntual principal hacia abajo (reactiva al interruptor) */}
+      {/* Luz única para la lámpara (antes eran 3, ahora 1 más intensa) */}
       {dark && (
-        <pointLight position={[-4.7, 2.0, -3.7]} intensity={10} distance={10.0} color="#ffcc66" decay={1.5} castShadow={false} />
-      )}
-      {/* Luz de relleno — ilumina la zona media */}
-      {dark && (
-        <pointLight position={[-4.7, 1.2, -3.3]} intensity={4.0} distance={8.0} color="#ffddaa" decay={1.5} castShadow={false} />
-      )}
-      {/* Luz de ambiente extra (ilumina el suelo y paredes cercanas) */}
-      {dark && (
-        <pointLight position={[-4.2, 0.5, -3.0]} intensity={2.5} distance={6.0} color="#ffeecc" decay={2} castShadow={false} />
+        <pointLight position={[-4.7, 1.8, -3.7]} intensity={14} distance={10.0} color="#ffcc66" decay={1.5} castShadow={false} />
       )}
 
       {/* ===== PERCHERO DE PARED (pared izq, separado del armario) ===== */}
