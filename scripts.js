@@ -243,6 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (icon)  { icon.className = 'fa-solid fa-xmark'; }
     document.body.style.overflow = 'hidden';
     if (navMain) navMain.classList.remove('open');
+    // Reiniciar música en el iframe (si ya está cargado)
+    if (loaded) {
+      setTimeout(() => {
+        try { iframe.contentWindow?.postMessage({ type: 'START_MUSIC' }, '*'); } catch(_) {}
+      }, 300);
+    }
   }
 
   function close3D() {
@@ -251,6 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.classList.remove('active');
     if (icon)  { icon.className = 'fa-solid fa-cube'; }
     document.body.style.overflow = '';
+    // Parar la música del iframe al salir
+    try { iframe.contentWindow?.postMessage({ type: 'STOP_MUSIC' }, '*'); } catch(_) {}
   }
 
   btn.addEventListener('click', () => {
@@ -437,6 +445,17 @@ document.addEventListener('DOMContentLoaded', () => {
     muted = !muted;
     localStorage.setItem('soundMuted', muted);
     applyMuteUI();
+    // Sincronizar mute con el iframe 3D
+    const iframe3d = document.getElementById('iframe-3d');
+    try { iframe3d?.contentWindow?.postMessage({ type: 'MUTE_SYNC', muted }, '*'); } catch(_) {}
+  });
+
+  // Sincronizar cuando el iframe 3D cambia el estado de mute
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'soundMuted') {
+      muted = e.newValue === 'true';
+      applyMuteUI();
+    }
   });
 
   function getCtx() {
