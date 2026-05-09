@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Audio (Web Audio API, sin archivos externos) ── */
   let audioCtx = null;
   let lastSoundTime = 0;
-  const SOUND_COOLDOWN = 1600;
+  const SOUND_COOLDOWN = 700;
 
   function getCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -453,34 +453,79 @@ document.addEventListener('DOMContentLoaded', () => {
     lastSoundTime = Date.now();
     try {
       const ctx = getCtx();
-      const t = ctx.currentTime;
-      // Chasquido inicial
-      const crackBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.07), ctx.sampleRate);
-      const cd = crackBuf.getChannelData(0);
-      for (let i = 0; i < cd.length; i++) cd[i] = Math.random() * 2 - 1;
-      const crack = ctx.createBufferSource();
-      crack.buffer = crackBuf;
-      const hpf = ctx.createBiquadFilter();
-      hpf.type = 'highpass'; hpf.frequency.value = 900;
+      const sr  = ctx.sampleRate;
+      const t   = ctx.currentTime;
+
+      // — Chasquido eléctrico inicial (ruido blanco + bandpass) —
+      const snapLen = Math.floor(sr * 0.04);
+      const snapBuf = ctx.createBuffer(1, snapLen, sr);
+      const snapD   = snapBuf.getChannelData(0);
+      for (let i = 0; i < snapLen; i++) snapD[i] = (Math.random() * 2 - 1) * (1 - i / snapLen);
+      const snap     = ctx.createBufferSource();
+      snap.buffer    = snapBuf;
+      const snapBpf  = ctx.createBiquadFilter();
+      snapBpf.type   = 'bandpass';
+      snapBpf.frequency.value = 3800;
+      snapBpf.Q.value = 0.4;
+      const snapGain = ctx.createGain();
+      snapGain.gain.setValueAtTime(0.9, t);
+      snapGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+      snap.connect(snapBpf); snapBpf.connect(snapGain); snapGain.connect(ctx.destination);
+      snap.start(t);
+
+      // — Crujido de rayo (ruido rosa filtrado, ataque rápido) —
+      const crackLen  = Math.floor(sr * 0.18);
+      const crackBuf  = ctx.createBuffer(1, crackLen, sr);
+      const crackD    = crackBuf.getChannelData(0);
+      let b0=0,b1=0,b2=0;
+      for (let i = 0; i < crackLen; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99765*b0 + white*0.0990460; b1 = 0.96300*b1 + white*0.2965164;
+        b2 = 0.57000*b2 + white*1.0526913;
+        crackD[i] = (b0 + b1 + b2 + white*0.1848) / 5.5;
+      }
+      const crack     = ctx.createBufferSource();
+      crack.buffer    = crackBuf;
+      const crackHpf  = ctx.createBiquadFilter();
+      crackHpf.type   = 'highpass'; crackHpf.frequency.value = 250;
       const crackGain = ctx.createGain();
-      crackGain.gain.setValueAtTime(0.35, t);
-      crackGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
-      crack.connect(hpf); hpf.connect(crackGain); crackGain.connect(ctx.destination);
-      crack.start(t);
-      // Retumbo grave
-      const rumbleBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 1.4), ctx.sampleRate);
-      const rd = rumbleBuf.getChannelData(0);
-      for (let i = 0; i < rd.length; i++) rd[i] = Math.random() * 2 - 1;
-      const rumble = ctx.createBufferSource();
-      rumble.buffer = rumbleBuf;
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 110;
+      crackGain.gain.setValueAtTime(0.0001, t + 0.01);
+      crackGain.gain.linearRampToValueAtTime(0.55, t + 0.04);
+      crackGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      crack.connect(crackHpf); crackHpf.connect(crackGain); crackGain.connect(ctx.destination);
+      crack.start(t + 0.01);
+
+      // — Retumbo grave (ruido blanco + lowpass + envelope largo) —
+      const rumbleLen = Math.floor(sr * 2.2);
+      const rumbleBuf = ctx.createBuffer(1, rumbleLen, sr);
+      const rumbleD   = rumbleBuf.getChannelData(0);
+      for (let i = 0; i < rumbleLen; i++) rumbleD[i] = Math.random() * 2 - 1;
+      const rumble     = ctx.createBufferSource();
+      rumble.buffer    = rumbleBuf;
+      const lpf1       = ctx.createBiquadFilter();
+      lpf1.type        = 'lowpass'; lpf1.frequency.value = 80;
+      const lpf2       = ctx.createBiquadFilter();
+      lpf2.type        = 'lowpass'; lpf2.frequency.value = 55;
       const rumbleGain = ctx.createGain();
-      rumbleGain.gain.setValueAtTime(0.0001, t);
-      rumbleGain.gain.linearRampToValueAtTime(0.22, t + 0.12);
-      rumbleGain.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
-      rumble.connect(lpf); lpf.connect(rumbleGain); rumbleGain.connect(ctx.destination);
-      rumble.start(t + 0.04);
+      rumbleGain.gain.setValueAtTime(0.0001, t + 0.03);
+      rumbleGain.gain.linearRampToValueAtTime(0.38, t + 0.18);
+      rumbleGain.gain.setValueAtTime(0.38, t + 0.35);
+      rumbleGain.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+      rumble.connect(lpf1); lpf1.connect(lpf2); lpf2.connect(rumbleGain);
+      rumbleGain.connect(ctx.destination);
+      rumble.start(t + 0.03);
+
+      // — Eco lejano (segundo rumble más tenue, desfasado) —
+      const echo     = ctx.createBufferSource();
+      echo.buffer    = rumbleBuf;
+      const echoLpf  = ctx.createBiquadFilter();
+      echoLpf.type   = 'lowpass'; echoLpf.frequency.value = 40;
+      const echoGain = ctx.createGain();
+      echoGain.gain.setValueAtTime(0.0001, t + 0.55);
+      echoGain.gain.linearRampToValueAtTime(0.14, t + 0.8);
+      echoGain.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+      echo.connect(echoLpf); echoLpf.connect(echoGain); echoGain.connect(ctx.destination);
+      echo.start(t + 0.55);
     } catch (e) {}
   }
 
