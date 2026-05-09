@@ -195,7 +195,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; flex-direction: row;
   gap: 64px; padding: 80px 24px;
   max-width: 1200px; margin: 0 auto;
-  position: relative;
+  position: relative; z-index: 1;
   overflow: hidden;
 }
 
@@ -242,7 +242,7 @@ button { font-family: inherit; }
 .hero-img {
   width: 260px; height: 260px; border-radius: 50%;
   object-fit: cover; border: 3px solid var(--border);
-  position: relative; z-index: 10000;
+  position: relative;
   box-shadow: 0 0 0 8px rgba(108,99,255,0.08);
   cursor: pointer;
   transition: transform 0.18s ease;
@@ -254,7 +254,7 @@ button { font-family: inherit; }
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 0;
   animation: bubble-rise var(--dur, 1.2s) ease-out forwards;
 }
 @keyframes bubble-rise {
@@ -269,7 +269,7 @@ button { font-family: inherit; }
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 0;
   overflow: visible;
   animation: lightning-svg-flash var(--dur, 0.7s) ease-out forwards;
 }

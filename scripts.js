@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         --dur:${dur}s;
         animation-delay:${delay}s;
       `;
-      wrap.appendChild(el);
+      document.body.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
     }
   }
