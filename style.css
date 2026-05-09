@@ -250,6 +250,9 @@ button { font-family: inherit; }
   box-shadow: 0 0 0 8px rgba(108,99,255,0.08);
   cursor: pointer;
   transition: transform 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .hero-img:active { transform: scale(0.95); }
 
