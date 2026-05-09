@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from 'react';
 
 /* ── Joystick virtual ── */
-function Joystick({ joystickRef, onInteract }) {
+function Joystick({ joystickRef }) {
   const baseRef  = useRef();
   const knobRef  = useRef();
   const touchId  = useRef(null);
@@ -122,7 +122,7 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
       )}
 
       {/* Móvil: joystick */}
-      {isMobile && <Joystick joystickRef={joystickRef} onInteract={onInteract} />}
+      {isMobile && <Joystick joystickRef={joystickRef} />}
     </>
   );
 }
