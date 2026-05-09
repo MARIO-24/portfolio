@@ -548,6 +548,15 @@ header {
 }
 .footer-links a:hover { color: #fff; }
 
+@media (max-width: 600px) {
+    .site-footer { padding: 16px 12px; }
+    .footer-inner { flex-direction: column; gap: 6px; }
+    .footer-sep { display: none; }
+    .footer-name { font-size: 0.9rem; }
+    .footer-copy { font-size: 0.78rem; }
+    .footer-links { gap: 16px; }
+}
+
 .btn-3d.active {
     background: linear-gradient(135deg, #ff6584, #f1c40f);
     box-shadow: 0 4px 22px rgba(255,101,132,0.7);
