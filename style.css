@@ -133,10 +133,14 @@ header {
 }
 
 .social-menu a {
-    display: block;
-    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
     color: #ffffff;
     text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
 }
 
 .social-menu a:hover {
@@ -413,7 +417,7 @@ header {
     }
 }
 
-/* ─── BOTÓN 3D ─── */
+/* ─── BOTÓN 3D (flotante en lateral) ─── */
 .btn-3d {
     background: linear-gradient(135deg, #6c63ff, #ff6584);
     border: none;
@@ -422,17 +426,58 @@ header {
     letter-spacing: 0.5px;
     cursor: pointer;
     box-shadow: 0 0 16px rgba(108,99,255,0.55);
-    transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+    transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s, width 0.25s;
     position: relative;
 }
-.btn-3d:hover {
-    transform: scale(1.06);
+.btn-3d-float {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 10px;
+    border-radius: 14px 0 0 14px;
+    writing-mode: horizontal-tb;
+    overflow: hidden;
+    min-width: 48px;
+}
+.btn-3d-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    line-height: 1;
+}
+.btn-3d-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+.btn-3d-float:hover {
+    padding-right: 16px;
     box-shadow: 0 0 28px rgba(108,99,255,0.8);
     background: linear-gradient(135deg, #ff6584, #6c63ff);
 }
 .btn-3d.active {
     background: linear-gradient(135deg, #ff6584, #f1c40f);
     box-shadow: 0 0 28px rgba(255,101,132,0.7);
+}
+@media (max-width: 600px) {
+    .btn-3d-float {
+        top: auto;
+        bottom: 24px;
+        right: 0;
+        transform: none;
+        border-radius: 14px 0 0 14px;
+        padding: 10px 8px;
+    }
+    .btn-3d-label { font-size: 0.65rem; }
+    .btn-3d-icon  { font-size: 1.1rem; }
 }
 
 /* ─── OVERLAY 3D ─── */

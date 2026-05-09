@@ -49,7 +49,6 @@ export const portfolioData = {
       { nombre: "Instagram", url: "https://www.instagram.com/rufitodeveloper/", icon: "instagram", color: "#fff", bg: "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" },
       { nombre: "Twitter / X", url: "https://x.com/RufitoDeveloper", icon: "twitter", color: "#fff", bg: "#000" },
       { nombre: "Infojobs", url: "https://www.infojobs.net/", icon: "infojobs", color: "#fff", bg: "#164194" },
-      { nombre: "Facebook", url: "https://facebook.com/", icon: "facebook", color: "#fff", bg: "#1877f2" },
     ],
     ui: {
       welcome: "Bienvenido a mi Portfolio Interactivo",
@@ -127,7 +126,6 @@ export const portfolioData = {
       { nombre: "Instagram", url: "https://www.instagram.com/rufitodeveloper/", icon: "instagram", color: "#fff", bg: "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" },
       { nombre: "Twitter / X", url: "https://x.com/RufitoDeveloper", icon: "twitter", color: "#fff", bg: "#000" },
       { nombre: "Infojobs", url: "https://www.infojobs.net/", icon: "infojobs", color: "#fff", bg: "#164194" },
-      { nombre: "Facebook", url: "https://facebook.com/", icon: "facebook", color: "#fff", bg: "#1877f2" },
     ],
     ui: {
       welcome: "Welcome to my Interactive Portfolio",
