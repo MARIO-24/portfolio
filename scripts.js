@@ -406,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   const img = document.getElementById('hero-img');
   if (!img) return;
+  const wrap = img.closest('.hero-img-wrap') || document.body;
 
   const BUBBLE_COLORS = [
     'rgba(99,179,255,0.75)', 'rgba(140,100,255,0.75)',
@@ -434,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         --dur:${dur}s;
         animation-delay:${delay}s;
       `;
-      document.body.appendChild(el);
+      wrap.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
     }
   }
@@ -458,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         --dur:${dur}s;
         animation-delay:${delay}s;
       `;
-      document.body.appendChild(el);
+      wrap.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
     }
   }
