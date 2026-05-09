@@ -120,13 +120,16 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; font-family: 'N
 .project-link:hover { background: #5751e8; transform: scale(1.04); }
 
 /* ─── PERSONAL MODAL ─── */
-.personal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.personal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .personal-card {
   background: var(--tag-bg); border: 1px solid var(--glass-border);
   border-radius: 12px; padding: 14px 16px;
 }
-.personal-card-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 4px; }
-.personal-card-value { font-size: 0.95rem; color: var(--text); font-weight: 500; }
+.personal-card--full { grid-column: 1 / -1; }
+.personal-card-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 5px; }
+.personal-card-value { font-size: 0.95rem; color: var(--text); font-weight: 500; word-break: break-word; }
+.personal-email-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+.personal-email-link:hover { text-decoration: underline; }
 .cv-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -280,6 +283,21 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; font-family: 'N
 .joystick-e:active { background: var(--accent2); transform: scale(0.92); }
 
 /* ─── COMPACT BUTTONS on móvil ─── */
+@media (max-width: 600px) {
+  .modal-box {
+    padding: 28px 16px 20px;
+    width: 97vw;
+    max-height: 88vh;
+    border-radius: 18px;
+  }
+  .modal-title { font-size: 1.25rem; margin-bottom: 14px; }
+  .personal-grid { grid-template-columns: 1fr; }
+  .personal-card--full { grid-column: auto; }
+  .cv-btn { width: 100%; }
+  .project-card { flex-direction: column; }
+  .project-img { width: 100%; height: 140px; }
+}
+
 @media (max-width: 800px) {
   .hud-title {
     font-size: 0.75rem;

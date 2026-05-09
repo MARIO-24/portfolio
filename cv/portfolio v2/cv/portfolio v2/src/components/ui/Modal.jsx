@@ -123,19 +123,32 @@ function PersonalContent({ data }) {
     <>
       <div className="modal-title">💻 {ui.sections.personal}</div>
       <div className="personal-grid">
-        {[
-          { label: 'Nombre', value: p.nombre },
-          { label: 'Apellidos', value: p.apellidos },
-          { label: 'Rol', value: p.rol },
-          { label: 'Nacimiento', value: p.nacimiento },
-          { label: 'Email', value: p.email },
-          { label: 'Ubicación', value: p.ubicacion },
-        ].map((item, i) => (
-          <div key={i} className="personal-card">
-            <div className="personal-card-label">{item.label}</div>
-            <div className="personal-card-value">{item.value}</div>
+        <div className="personal-card">
+          <div className="personal-card-label">👤 Nombre</div>
+          <div className="personal-card-value">{p.nombre}</div>
+        </div>
+        <div className="personal-card">
+          <div className="personal-card-label">👤 Apellidos</div>
+          <div className="personal-card-value">{p.apellidos}</div>
+        </div>
+        <div className="personal-card personal-card--full">
+          <div className="personal-card-label">💼 Rol</div>
+          <div className="personal-card-value">{p.rol}</div>
+        </div>
+        <div className="personal-card">
+          <div className="personal-card-label">🎂 Nacimiento</div>
+          <div className="personal-card-value">{p.nacimiento}</div>
+        </div>
+        <div className="personal-card personal-card--full">
+          <div className="personal-card-label">✉️ Email</div>
+          <div className="personal-card-value">
+            <a href={`mailto:${p.email}`} className="personal-email-link">{p.email}</a>
           </div>
-        ))}
+        </div>
+        <div className="personal-card">
+          <div className="personal-card-label">📍 Ubicación</div>
+          <div className="personal-card-value">{p.ubicacion}</div>
+        </div>
       </div>
       <a href={p.cv} download className="cv-btn">
         {ui.download}
