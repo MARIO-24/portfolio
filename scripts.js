@@ -399,3 +399,80 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 });
+
+/* ─────────────────────────────────────────────
+   HERO PHOTO — CLICK PARTICLES
+───────────────────────────────────────────── */
+(function () {
+  const img = document.getElementById('hero-img');
+  if (!img) return;
+
+  const BUBBLE_COLORS = [
+    'rgba(99,179,255,0.75)', 'rgba(140,100,255,0.75)',
+    'rgba(80,220,200,0.75)', 'rgba(180,130,255,0.7)',
+    'rgba(100,200,255,0.7)'
+  ];
+
+  function spawnBubbles(cx, cy) {
+    const COUNT = 14;
+    for (let i = 0; i < COUNT; i++) {
+      const el = document.createElement('div');
+      el.className = 'bubble-particle';
+      const size = 10 + Math.random() * 22;
+      const xOff = (Math.random() - 0.5) * 140;
+      const rise = 140 + Math.random() * 120;
+      const dur  = 0.9 + Math.random() * 0.7;
+      const delay = Math.random() * 0.3;
+      el.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${cx + xOff - size / 2}px;
+        top:${cy - size / 2}px;
+        background: ${BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)]};
+        border: 1.5px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(2px);
+        --rise:-${rise}px;
+        --dur:${dur}s;
+        animation-delay:${delay}s;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function spawnLightning(cx, cy) {
+    const COUNT = 7;
+    for (let i = 0; i < COUNT; i++) {
+      const el = document.createElement('div');
+      el.className = 'lightning-particle';
+      const height = 60 + Math.random() * 80;
+      const xOff   = (Math.random() - 0.5) * 160;
+      const drop   = 120 + Math.random() * 100;
+      const dur    = 0.4 + Math.random() * 0.35;
+      const delay  = Math.random() * 0.25;
+      const skew   = (Math.random() - 0.5) * 18;
+      el.style.cssText = `
+        height:${height}px;
+        left:${cx + xOff}px;
+        top:${cy}px;
+        transform: skewX(${skew}deg) scaleY(0);
+        --drop:${drop}px;
+        --dur:${dur}s;
+        animation-delay:${delay}s;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  img.addEventListener('click', (e) => {
+    const rect = img.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isDark = document.documentElement.dataset.theme !== 'light';
+    if (isDark) {
+      spawnLightning(cx, cy);
+    } else {
+      spawnBubbles(cx, cy);
+    }
+  });
+})();
