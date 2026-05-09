@@ -401,12 +401,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ─────────────────────────────────────────────
-   HERO PHOTO — CLICK PARTICLES
+   HERO PHOTO — CLICK PARTICLES + SOUND
 ───────────────────────────────────────────── */
 (function () {
   const img = document.getElementById('hero-img');
   if (!img) return;
-  const wrap = img.closest('.hero-img-wrap') || document.body;
 
   const BUBBLE_COLORS = [
     'rgba(99,179,255,0.75)', 'rgba(140,100,255,0.75)',
@@ -414,26 +413,101 @@ document.addEventListener('DOMContentLoaded', () => {
     'rgba(100,200,255,0.7)'
   ];
 
+  /* ── Audio (Web Audio API, sin archivos externos) ── */
+  let audioCtx = null;
+  let lastSoundTime = 0;
+  const SOUND_COOLDOWN = 1600;
+
+  function getCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playBubbleSound() {
+    if (Date.now() - lastSoundTime < SOUND_COOLDOWN) return;
+    lastSoundTime = Date.now();
+    try {
+      const ctx = getCtx();
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const osc  = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          const freq = 380 + Math.random() * 500;
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq * 1.6, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + 0.22);
+          gain.gain.setValueAtTime(0.06, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.28);
+        }, i * 55);
+      }
+    } catch (e) {}
+  }
+
+  function playThunderSound() {
+    if (Date.now() - lastSoundTime < SOUND_COOLDOWN) return;
+    lastSoundTime = Date.now();
+    try {
+      const ctx = getCtx();
+      const t = ctx.currentTime;
+      // Chasquido inicial
+      const crackBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.07), ctx.sampleRate);
+      const cd = crackBuf.getChannelData(0);
+      for (let i = 0; i < cd.length; i++) cd[i] = Math.random() * 2 - 1;
+      const crack = ctx.createBufferSource();
+      crack.buffer = crackBuf;
+      const hpf = ctx.createBiquadFilter();
+      hpf.type = 'highpass'; hpf.frequency.value = 900;
+      const crackGain = ctx.createGain();
+      crackGain.gain.setValueAtTime(0.35, t);
+      crackGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+      crack.connect(hpf); hpf.connect(crackGain); crackGain.connect(ctx.destination);
+      crack.start(t);
+      // Retumbo grave
+      const rumbleBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 1.4), ctx.sampleRate);
+      const rd = rumbleBuf.getChannelData(0);
+      for (let i = 0; i < rd.length; i++) rd[i] = Math.random() * 2 - 1;
+      const rumble = ctx.createBufferSource();
+      rumble.buffer = rumbleBuf;
+      const lpf = ctx.createBiquadFilter();
+      lpf.type = 'lowpass'; lpf.frequency.value = 110;
+      const rumbleGain = ctx.createGain();
+      rumbleGain.gain.setValueAtTime(0.0001, t);
+      rumbleGain.gain.linearRampToValueAtTime(0.22, t + 0.12);
+      rumbleGain.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+      rumble.connect(lpf); lpf.connect(rumbleGain); rumbleGain.connect(ctx.destination);
+      rumble.start(t + 0.04);
+    } catch (e) {}
+  }
+
+  /* ── Burbujas (modo claro) ── */
   function spawnBubbles(cx, cy) {
-    const COUNT = 18;
-    const maxSpread = Math.min(90, window.innerWidth * 0.25);
+    const mobile = window.innerWidth < 600;
+    const COUNT   = mobile ? 8  : 18;
+    const maxSize = mobile ? 14 : 24;
+    const spread  = mobile ? window.innerWidth * 0.14 : Math.min(85, window.innerWidth * 0.22);
+    const vw = window.innerWidth;
+
     for (let i = 0; i < COUNT; i++) {
       const el = document.createElement('div');
       el.className = 'bubble-particle';
-      const size = 10 + Math.random() * 24;
-      const xOff = (Math.random() - 0.5) * maxSpread * 2;
-      const rawX = cx + xOff - size / 2;
-      const clampedX = Math.max(0, Math.min(window.innerWidth - size, rawX));
+      const size = 7 + Math.random() * maxSize;
+      const xOff = (Math.random() - 0.5) * spread * 2;
+      const left = Math.max(4, Math.min(vw - size - 4, cx + xOff - size / 2));
       const rise = cy * (0.85 + Math.random() * 0.35);
       const dur  = 1.8 + Math.random() * 0.9;
       const delay = Math.random() * 0.35;
       el.style.cssText = `
         width:${size}px; height:${size}px;
-        left:${clampedX}px;
+        left:${left}px;
         top:${cy - size / 2}px;
-        background: ${BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)]};
-        border: 1.5px solid rgba(255,255,255,0.35);
-        backdrop-filter: blur(2px);
+        background:${BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)]};
+        border:1.5px solid rgba(255,255,255,0.35);
+        backdrop-filter:blur(2px);
         --rise:-${rise}px;
         --dur:${dur}s;
         animation-delay:${delay}s;
@@ -443,14 +517,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /* ── Rayos (modo oscuro) ── */
   function lightningPoints(startX, startY, endY) {
-    const pts = [{ x: startX, y: startY }];
+    const pts  = [{ x: startX, y: startY }];
     const segs = 9 + Math.floor(Math.random() * 6);
     const stepH = (endY - startY) / segs;
+    const maxDev = Math.min(50, window.innerWidth * 0.10);
     let x = startX;
     for (let i = 1; i <= segs; i++) {
-      const spread = 10 + (i / segs) * 55;
-      x += (Math.random() - 0.5) * spread * 2;
+      const dev = Math.min(maxDev, 8 + (i / segs) * 44);
+      x += (Math.random() - 0.5) * dev * 2;
       x = Math.max(10, Math.min(window.innerWidth - 10, x));
       pts.push({ x, y: startY + stepH * i });
     }
@@ -461,11 +537,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
   }
 
-  function makeBolt(svg, pts, strokeColor, width, filterId) {
+  function makeBolt(svg, pts, stroke, width, filterId) {
     const ns = 'http://www.w3.org/2000/svg';
-    const p = document.createElementNS(ns, 'path');
+    const p  = document.createElementNS(ns, 'path');
     p.setAttribute('d', ptsToD(pts));
-    p.setAttribute('stroke', strokeColor);
+    p.setAttribute('stroke', stroke);
     p.setAttribute('stroke-width', String(width));
     p.setAttribute('fill', 'none');
     p.setAttribute('stroke-linecap', 'round');
@@ -475,9 +551,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function spawnLightning(cx, cy) {
-    const ns = 'http://www.w3.org/2000/svg';
-    const COUNT = 4;
-    const endY = window.innerHeight + 30;
+    const ns     = 'http://www.w3.org/2000/svg';
+    const mobile = window.innerWidth < 600;
+    const COUNT  = mobile ? 2 : 4;
+    const startSpread = mobile ? 20 : 60;
+    const endY   = window.innerHeight + 30;
+    const blurSD = mobile ? '2' : '5';
 
     for (let b = 0; b < COUNT; b++) {
       const bDelay = b * 85 + Math.random() * 40;
@@ -488,36 +567,33 @@ document.addEventListener('DOMContentLoaded', () => {
         svg.style.setProperty('--dur', `${dur}s`);
         svg.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
 
-        // Glow filter
+        // Filtro de glow (márgenes reducidos en móvil para no desbordar)
         const filterId = `lf${Date.now()}${b}`;
         const defs = document.createElementNS(ns, 'defs');
         const filt = document.createElementNS(ns, 'filter');
         filt.setAttribute('id', filterId);
-        filt.setAttribute('x', '-60%'); filt.setAttribute('y', '-10%');
-        filt.setAttribute('width', '220%'); filt.setAttribute('height', '120%');
+        filt.setAttribute('x', '-20%'); filt.setAttribute('y', '-5%');
+        filt.setAttribute('width', '140%'); filt.setAttribute('height', '110%');
         const blur = document.createElementNS(ns, 'feGaussianBlur');
         blur.setAttribute('in', 'SourceGraphic');
-        blur.setAttribute('stdDeviation', '5');
-        filt.appendChild(blur);
-        defs.appendChild(filt);
-        svg.appendChild(defs);
+        blur.setAttribute('stdDeviation', blurSD);
+        filt.appendChild(blur); defs.appendChild(filt); svg.appendChild(defs);
 
-        // Main bolt
-        const startX = cx + (Math.random() - 0.5) * 70;
+        // Rayo principal
+        const rawSX  = cx + (Math.random() - 0.5) * startSpread;
+        const startX = Math.max(10, Math.min(window.innerWidth - 10, rawSX));
         const mainPts = lightningPoints(startX, cy, endY);
-        makeBolt(svg, mainPts, '#9966ff', 12, filterId);   // outer glow
-        makeBolt(svg, mainPts, '#c4aaff', 5,  filterId);   // mid glow
-        makeBolt(svg, mainPts, '#ffffff', 2.5, null);       // bright core
-        makeBolt(svg, mainPts, '#eee8ff', 1,  null);        // inner white
+        makeBolt(svg, mainPts, '#9966ff', mobile ? 7  : 12, filterId);
+        makeBolt(svg, mainPts, '#c4aaff', mobile ? 3  : 5,  filterId);
+        makeBolt(svg, mainPts, '#ffffff', mobile ? 1.5 : 2.5, null);
+        makeBolt(svg, mainPts, '#eee8ff', 1, null);
 
-        // 1-2 branches
-        const brCount = 1 + Math.floor(Math.random() * 2);
-        for (let br = 0; br < brCount; br++) {
-          const fromIdx = Math.floor(mainPts.length * 0.3 + Math.random() * mainPts.length * 0.45);
-          const from = mainPts[fromIdx];
-          const brEnd = from.y + (endY - from.y) * (0.25 + Math.random() * 0.4);
-          const brPts = lightningPoints(from.x, from.y, brEnd);
-          makeBolt(svg, brPts, '#7744dd', 7,  filterId);
+        // Rama (siempre 1 en escritorio, 50% en móvil)
+        if (!mobile || Math.random() > 0.5) {
+          const fi   = Math.floor(mainPts.length * 0.3 + Math.random() * mainPts.length * 0.4);
+          const from = mainPts[fi];
+          const brPts = lightningPoints(from.x, from.y, from.y + (endY - from.y) * (0.25 + Math.random() * 0.4));
+          makeBolt(svg, brPts, '#7744dd', mobile ? 4 : 7, filterId);
           makeBolt(svg, brPts, 'rgba(210,195,255,0.8)', 1.5, null);
         }
 
@@ -527,15 +603,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  img.addEventListener('click', (e) => {
+  /* ── Click handler ── */
+  img.addEventListener('click', () => {
     const rect = img.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
     const isDark = document.documentElement.dataset.theme !== 'light';
     if (isDark) {
       spawnLightning(cx, cy);
+      playThunderSound();
     } else {
       spawnBubbles(cx, cy);
+      playBubbleSound();
     }
   });
 })();
