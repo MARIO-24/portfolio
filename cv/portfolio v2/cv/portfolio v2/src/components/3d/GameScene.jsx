@@ -77,7 +77,7 @@ function NearHint({ charPos, zones, modalOpen }) {
   );
 }
 
-export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile }) {
+export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData }) {
   const keys = useRef({});
   const charPos = useRef(new THREE.Vector3(0, 0, 0));
   const charRotY = useRef(0);
@@ -87,19 +87,18 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
   const eHandlerRef = useRef(null);
   const modalOpenRef = useRef(false);
   const onCloseRef = useRef(null);
-  // Cached vectors — evitan allocar new THREE.Vector3 cada frame (causa GC parones)
-  const _camTarget = useRef(new THREE.Vector3());
-  const _lookAt    = useRef(new THREE.Vector3());
   modalOpenRef.current = modalOpen;
   onCloseRef.current = onClose;
 
-  // Teclado físico + D-pad virtual (ambos usan KeyboardEvent)
   useEffect(() => {
     const down = (e) => {
       keys.current[e.code] = true;
       if (e.code === 'KeyE') {
-        if (modalOpenRef.current) onCloseRef.current?.();
-        else if (eHandlerRef.current) eHandlerRef.current();
+        if (modalOpenRef.current) {
+          onCloseRef.current?.();
+        } else if (eHandlerRef.current) {
+          eHandlerRef.current();
+        }
       }
     };
     const up = (e) => { keys.current[e.code] = false; };
@@ -147,57 +146,58 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     if (moving) {
       const len = Math.sqrt(dx * dx + dz * dz);
       dx /= len; dz /= len;
-      const speed = isMobile ? 2.2 : 3.5;
+      const speed = 3.5;
       const nextX = Math.max(-5.0, Math.min(5.0, charPos.current.x + dx * speed * delta));
       if (!checkCollision(nextX, charPos.current.z)) charPos.current.x = nextX;
       const nextZ = Math.max(-4.0, Math.min(3.8, charPos.current.z + dz * speed * delta));
       if (!checkCollision(charPos.current.x, nextZ)) charPos.current.z = nextZ;
       charRotY.current = Math.atan2(dx, dz);
-      walkT.current += delta * (isMobile ? 5 : 8);
+      walkT.current += delta * 8;
     }
 
     if (charRef.current) {
-      charRef.current.position.lerp(charPos.current, isMobile ? 0.25 : 0.18);
-      charRef.current.rotation.y += (charRotY.current - charRef.current.rotation.y) * (isMobile ? 0.28 : 0.2);
+      charRef.current.position.lerp(charPos.current, 0.18);
+      charRef.current.rotation.y += (charRotY.current - charRef.current.rotation.y) * 0.2;
     }
 
-    _camTarget.current.set(
-      charPos.current.x + (isMobile ? 4 : 5),
-      charPos.current.y + (isMobile ? 7 : 9),
-      charPos.current.z + (isMobile ? 6 : 8)
+    const camTarget = new THREE.Vector3(
+      charPos.current.x + 5,
+      charPos.current.y + 9,
+      charPos.current.z + 8
     );
-    camera.position.lerp(_camTarget.current, isMobile ? 0.07 : 0.04);
-    _lookAt.current.set(charPos.current.x, charPos.current.y + 1, charPos.current.z);
-    camera.lookAt(_lookAt.current);
+    camera.position.lerp(camTarget, 0.04);
+    const lookAt = new THREE.Vector3(charPos.current.x, charPos.current.y + 1, charPos.current.z);
+    camera.lookAt(lookAt);
   });
 
   const lightColor      = dark ? '#aabbff' : '#fffbe6';
   const ambientIntensity = dark ? 0.52 : 0.35;
-  const dirIntensity    = dark ? (isMobile ? 0.5 : 0.75) : (isMobile ? 0.5 : 0.7);
-  const pointIntensity  = dark ? (isMobile ? 0.7 : 1.0)  : (isMobile ? 0.8 : 1.2);
+  const dirIntensity    = dark ? 0.75 : 0.7;
+  const pointIntensity  = dark ? 1.0  : 1.2;
 
   return (
     <>
       <ambientLight intensity={ambientIntensity} />
-      {/* Una sola luz con sombras — shadow map 1024 (mitad de VRAM que 2048, diff visual mínima) */}
       <directionalLight
         position={[4, 10, 6]}
         intensity={dirIntensity}
-        castShadow={!isMobile}
-        shadow-mapSize={[1024, 1024]}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
         shadow-camera-near={0.5}
-        shadow-camera-far={40}
-        shadow-camera-left={-9}
-        shadow-camera-right={9}
-        shadow-camera-top={9}
-        shadow-camera-bottom={-9}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
-      {/* Luz de ambiente cálida — sin sombras */}
-      <pointLight position={[0, 3.6, 0]} intensity={pointIntensity} color={lightColor} />
-      {/* Luz ventana — solo en modo claro */}
-      {!dark && <pointLight position={[2.0, 2.4, -3.8]} intensity={0.6} color="#d4eeff" />}
-      {/* Modo oscuro: luz cálida general (reemplaza los 3 puntuales anteriores) */}
-      {dark && <pointLight position={[0, 2.0, 0]} intensity={isMobile ? 1.0 : 1.8} color="#ffcc77" distance={12} decay={1.5} />}
+      <pointLight position={[0, 3.6, 0]} intensity={pointIntensity} color={lightColor} castShadow />
+      <pointLight position={[-4, 2, -3]} intensity={dark ? 0.5 : 0.2} color={dark ? '#4466cc' : '#ffcc88'} />
+      {/* Luz que entra por la ventana */}
+      <pointLight position={[2.0, 2.4, -3.8]} intensity={dark ? 0.4 : 0.8} color={dark ? '#1a2a66' : '#d4eeff'} />
+      {/* Bombilla colgante — ilumina la habitacion en modo oscuro */}
+      {dark && <pointLight position={[0, 3.0, 0]} intensity={2.2} color="#ffcc77" distance={9} decay={1.8} castShadow />}
+      {/* Brillo pantalla PC ilumina la zona de la mesa */}
+      {dark && <pointLight position={[-0.3, 1.5, -3.2]} intensity={0.6} color="#4488ff" distance={3} decay={2} />}
 
       <Room dark={dark} />
       <Character charRef={charRef} dark={dark} lang={lang} outfit={outfit} walkT={walkT} />
