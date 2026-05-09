@@ -90,7 +90,7 @@ function NearHint({ charPos, zones, modalOpen }) {
     <group ref={groupRef} position={[0, 2.2, 0]}>
       {zone && (
         <Html center distanceFactor={8}>
-          <div className="hint-e">E — {zone.icon} {zone.label}</div>
+          <div className="hint-e"><span className="hint-e-key">E</span>{zone.icon} {zone.label}</div>
         </Html>
       )}
     </group>
@@ -281,7 +281,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
       {/* Movil — tumbado en la segunda mesita */}
       <MobilePhone
         position={[5.0, 0.71, 1.7]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        rotation={[-Math.PI / 2, Math.PI / 2, 0]}
         dark={dark}
         label={uiData.objects.mobile}
         onInteract={() => onInteract('social')}
