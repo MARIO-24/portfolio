@@ -7,14 +7,21 @@ menuToggle.addEventListener('click', () => {
 
 // ─── TOGGLE VISTA 3D ───
 (function () {
-    const btn     = document.getElementById('toggle-3d');
-    const overlay = document.getElementById('overlay-3d');
+    const btn      = document.getElementById('toggle-3d');
+    const overlay  = document.getElementById('overlay-3d');
     const closeBtn = document.getElementById('close-3d');
-    const iframe  = document.getElementById('iframe-3d');
+    const iframe   = document.getElementById('iframe-3d');
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth <= 800;
+    const label    = btn.querySelector('.btn-3d-label');
+    const icon     = btn.querySelector('.btn-3d-icon');
     let loaded = false;
 
     function open3D() {
-        // Carga el iframe la primera vez (lazy load)
+        // En móvil: abrir en nueva pestaña para evitar problemas de WebGL en iframe
+        if (isMobile) {
+            window.open(iframe.dataset.src, '_blank');
+            return;
+        }
         if (!loaded) {
             iframe.src = iframe.dataset.src;
             loaded = true;
@@ -22,7 +29,8 @@ menuToggle.addEventListener('click', () => {
         overlay.classList.add('visible');
         overlay.removeAttribute('aria-hidden');
         btn.classList.add('active');
-        btn.textContent = '✕ Vista Normal';
+        if (icon)  icon.textContent  = '✕';
+        if (label) label.textContent = 'Salir';
         document.body.style.overflow = 'hidden';
         navLinks.classList.remove('active');
     }
@@ -31,7 +39,8 @@ menuToggle.addEventListener('click', () => {
         overlay.classList.remove('visible');
         overlay.setAttribute('aria-hidden', 'true');
         btn.classList.remove('active');
-        btn.textContent = '🎮 Vista 3D';
+        if (icon)  icon.textContent  = '🎮';
+        if (label) label.textContent = 'Vista 3D';
         document.body.style.overflow = '';
     }
 
@@ -40,7 +49,6 @@ menuToggle.addEventListener('click', () => {
     });
     closeBtn.addEventListener('click', close3D);
 
-    // Escape cierra el overlay
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('visible')) close3D();
     });

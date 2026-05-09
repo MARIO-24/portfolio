@@ -497,8 +497,7 @@ header {
 .close-3d {
     position: absolute;
     top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 20px;
     z-index: 10001;
     background: rgba(108,99,255,0.85);
     color: #fff;
@@ -516,12 +515,5 @@ header {
 }
 .close-3d:hover {
     background: rgba(255,101,132,0.9);
-    transform: translateX(-50%) scale(1.06);
-}
-@media (max-width: 600px) {
-    .close-3d {
-        top: 8px;
-        padding: 6px 14px;
-        font-size: 0.8rem;
-    }
+    transform: scale(1.06);
 }
