@@ -64,6 +64,155 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ─────────────────────────────────────────────
+   I18N — LANGUAGE SYSTEM
+───────────────────────────────────────────── */
+(function () {
+  const TRANSLATIONS = {
+    es: {
+      'nav.about': 'Sobre mí',
+      'nav.projects': 'Proyectos',
+      'nav.skills': 'Habilidades',
+      'nav.contact': 'Contacto',
+      'hero.badge': 'Disponible para trabajar',
+      'hero.title': 'Hola, soy <span class="gradient-text">Mario</span><br>Desarrollador Frontend &amp; Móvil',
+      'hero.sub': 'Construyo interfaces que se sienten bien, aplicaciones que funcionan de verdad y código del que me siento orgulloso. Especializado en React, Flutter y diseño UI/UX.',
+      'hero.btn1': 'Ver proyectos',
+      'hero.btn2': 'Hablemos',
+      'about.label': 'Sobre mí',
+      'about.title': '¿Quién soy?',
+      'about.p1': 'Soy estudiante de <strong>Desarrollo de Aplicaciones Multiplataforma</strong> con foco en frontend, diseño web y apps móviles. Me gusta que las cosas estén bien hechas: interfaces claras, código limpio y experiencias que de verdad funcionan.',
+      'about.p2': 'Trabajo principalmente con <strong>React</strong>, <strong>Flutter</strong> y <strong>Dart</strong>. También integro backends con <strong>Firebase</strong> y tengo experiencia en <strong>Java</strong>, <strong>Kotlin</strong> y <strong>Python</strong>.',
+      'about.p3': 'Aprendo rápido, me engancho con los retos técnicos y busco un equipo donde seguir creciendo y aportar de verdad.',
+      'about.cv': 'Descargar CV',
+      'stats.projects': 'Proyectos destacados',
+      'stats.tech': 'Tecnologías',
+      'stats.degree': 'Titulación',
+      'stats.commitment': 'Compromiso',
+      'projects.label': 'Proyectos',
+      'projects.title': 'Lo que he construido',
+      'projects.github': 'Ver en GitHub',
+      'proj.horus.desc': 'App de fitness con IA. Genera rutinas personalizadas con Google Gemini y un chatbot entrenador personal 24/7. Firebase Auth, Firestore y Storage.',
+      'proj.camilo.desc': 'App web con mascota virtual interactiva. React + Firebase con autenticación, perfil de usuario y mecánicas de cuidado en tiempo real.',
+      'projects.more.title': '¿Quieres ver más?',
+      'projects.more.sub': 'Todos mis repositorios y experimentos están en GitHub. Hay más de lo que parece.',
+      'projects.all': 'Todos los proyectos',
+      'skills.title': 'Tecnologías',
+      'skills.frameworks': 'Herramientas &amp; Frameworks',
+      'skills.languages': 'Lenguajes',
+      'contact.label': 'Contacto',
+      'contact.title': 'Hablemos',
+      'contact.intro': 'Si tienes un proyecto en mente, una oferta de trabajo o simplemente quieres hablar de tecnología, escríbeme. Suelo responder en menos de 24 horas.',
+      'form.name': 'Nombre',
+      'form.name.ph': 'Francisco',
+      'form.lastname': 'Apellidos',
+      'form.lastname.ph': 'Sánchez',
+      'form.email': 'Email',
+      'form.message': 'Mensaje',
+      'form.message.ph': 'Cuéntame tu proyecto o idea...',
+      'form.send': 'Enviar mensaje',
+      'btn3d.label': 'Vista 3D',
+      'btn3d.exit': 'Salir del 3D',
+    },
+    en: {
+      'nav.about': 'About me',
+      'nav.projects': 'Projects',
+      'nav.skills': 'Skills',
+      'nav.contact': 'Contact',
+      'hero.badge': 'Available for work',
+      'hero.title': 'Hi, I\'m <span class="gradient-text">Mario</span><br>Frontend &amp; Mobile Developer',
+      'hero.sub': 'I build interfaces that feel right, apps that actually work, and code I\'m proud of. Specialized in React, Flutter and UI/UX design.',
+      'hero.btn1': 'View projects',
+      'hero.btn2': "Let's talk",
+      'about.label': 'About me',
+      'about.title': 'Who am I?',
+      'about.p1': 'I\'m a <strong>Cross-Platform Application Development</strong> student focused on frontend, web design, and mobile apps. I like things done right: clean interfaces, clean code, and experiences that truly work.',
+      'about.p2': 'I mainly work with <strong>React</strong>, <strong>Flutter</strong> and <strong>Dart</strong>. I also integrate backends with <strong>Firebase</strong> and have experience in <strong>Java</strong>, <strong>Kotlin</strong> and <strong>Python</strong>.',
+      'about.p3': 'I learn fast, I get hooked on technical challenges, and I\'m looking for a team where I can keep growing and make a real contribution.',
+      'about.cv': 'Download CV',
+      'stats.projects': 'Featured projects',
+      'stats.tech': 'Technologies',
+      'stats.degree': 'Degree',
+      'stats.commitment': 'Commitment',
+      'projects.label': 'Projects',
+      'projects.title': 'What I\'ve built',
+      'projects.github': 'View on GitHub',
+      'proj.horus.desc': 'AI-powered fitness app. Generates personalized routines with Google Gemini and a 24/7 personal trainer chatbot. Firebase Auth, Firestore and Storage.',
+      'proj.camilo.desc': 'Web app with an interactive virtual pet. React + Firebase with authentication, user profiles and real-time care mechanics.',
+      'projects.more.title': 'Want to see more?',
+      'projects.more.sub': 'All my repositories and experiments are on GitHub. There\'s more than meets the eye.',
+      'projects.all': 'All projects',
+      'skills.title': 'Technologies',
+      'skills.frameworks': 'Tools &amp; Frameworks',
+      'skills.languages': 'Languages',
+      'contact.label': 'Contact',
+      'contact.title': "Let's talk",
+      'contact.intro': 'If you have a project in mind, a job offer, or just want to talk tech, write to me. I usually reply within 24 hours.',
+      'form.name': 'First name',
+      'form.name.ph': 'Francisco',
+      'form.lastname': 'Last name',
+      'form.lastname.ph': 'Sánchez',
+      'form.email': 'Email',
+      'form.message': 'Message',
+      'form.message.ph': 'Tell me about your project or idea...',
+      'form.send': 'Send message',
+      'btn3d.label': '3D View',
+      'btn3d.exit': 'Exit 3D',
+    }
+  };
+
+  function applyLang(lang) {
+    try { localStorage.setItem('lang', lang); } catch (_) {}
+    const t = TRANSLATIONS[lang] || TRANSLATIONS.es;
+
+    // data-i18n elements (innerHTML for those with HTML, textContent otherwise)
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key] !== undefined) {
+        // Use innerHTML for keys that may contain HTML tags
+        if (/<[a-z]/i.test(t[key])) {
+          el.innerHTML = t[key];
+        } else {
+          el.textContent = t[key];
+        }
+      }
+    });
+
+    // data-i18n-placeholder elements
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (t[key] !== undefined) el.placeholder = t[key];
+    });
+
+    // Update lang label button text
+    const langLabel = document.getElementById('lang-label');
+    if (langLabel) langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
+
+    // Update html lang attribute
+    document.documentElement.lang = lang === 'es' ? 'es' : 'en';
+  }
+
+  // Restore persisted lang
+  let currentLang;
+  try { currentLang = localStorage.getItem('lang') || 'es'; } catch (_) { currentLang = 'es'; }
+  applyLang(currentLang);
+
+  const langBtn = document.getElementById('lang-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', () => {
+      let cur;
+      try { cur = localStorage.getItem('lang') || 'es'; } catch (_) { cur = 'es'; }
+      const next = cur === 'es' ? 'en' : 'es';
+      applyLang(next);
+    });
+  }
+
+  // Expose globally so the 3D toggle can read current lang
+  window._getLang = function () {
+    try { return localStorage.getItem('lang') || 'es'; } catch (_) { return 'es'; }
+  };
+})();
+
+/* ─────────────────────────────────────────────
    VISTA 3D TOGGLE
 ───────────────────────────────────────────── */
 (function () {
@@ -80,12 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let loaded = false;
 
   function open3D() {
+    const langVal  = (window._getLang ? window._getLang() : 'es');
+    const themeVal = (() => { try { return localStorage.getItem('theme') || 'dark'; } catch (_) { return 'dark'; } })();
+    const src3d    = iframe.dataset.src + '?lang=' + langVal + '&theme=' + themeVal;
     if (isMobile) {
       const base = window.location.href.replace(/\/[^/]*$/, '/');
-      window.open(base + iframe.dataset.src, '_blank', 'noopener');
+      window.open(base + src3d, '_blank', 'noopener');
       return;
     }
-    if (!loaded) { iframe.src = iframe.dataset.src; loaded = true; }
+    if (!loaded) { iframe.src = src3d; loaded = true; }
     overlay.classList.add('visible');
     overlay.removeAttribute('aria-hidden');
     btn.classList.add('active');
@@ -100,7 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.setAttribute('aria-hidden', 'true');
     btn.classList.remove('active');
     if (icon)  { icon.className = 'fa-solid fa-cube'; }
-    if (label) label.textContent = 'Vista 3D';
+    const lang3dLabel = document.querySelector('.btn-3d-label[data-i18n="btn3d.label"]');
+    if (label) label.textContent = lang3dLabel ? lang3dLabel.textContent : 'Vista 3D';
     document.body.style.overflow = '';
   }
 

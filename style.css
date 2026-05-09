@@ -151,6 +151,20 @@ button { font-family: inherit; }
 .theme-toggle:hover, .menu-toggle:hover {
   color: var(--accent); border-color: var(--accent); background: var(--surface);
 }
+.lang-toggle {
+  height: 38px; padding: 0 12px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--text-soft);
+  letter-spacing: 0.03em;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  font-family: inherit;
+}
+.lang-toggle:hover {
+  color: var(--accent); border-color: var(--accent); background: var(--surface);
+}
 .menu-toggle { display: none; }
 
 /* ═══════════════════════════════════════════════

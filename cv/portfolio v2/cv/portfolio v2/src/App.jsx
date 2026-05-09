@@ -43,8 +43,22 @@ class ErrorBoundary extends Component {
 }
 
 function App() {
-  const [lang, setLang] = useState('es');
-  const [dark, setDark] = useState(false);
+  const [lang, setLang] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('lang') === 'en') return 'en';
+      if (p.get('lang') === 'es') return 'es';
+      return localStorage.getItem('lang') || 'es';
+    } catch { return 'es'; }
+  });
+  const [dark, setDark] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('theme') === 'dark') return true;
+      if (p.get('theme') === 'light') return false;
+      return localStorage.getItem('theme') === 'dark';
+    } catch { return false; }
+  });
   const [outfit, setOutfit] = useState(0);
   const [modal, setModal] = useState({ open: true, type: 'presentation' });
   const [isMobile, setIsMobile] = useState(
@@ -68,11 +82,19 @@ function App() {
   }, []);
 
   const toggleLang = useCallback(() => {
-    setLang((l) => (l === 'es' ? 'en' : 'es'));
+    setLang((l) => {
+      const next = l === 'es' ? 'en' : 'es';
+      try { localStorage.setItem('lang', next); } catch (_) {}
+      return next;
+    });
   }, []);
 
   const toggleDark = useCallback(() => {
-    setDark((d) => !d);
+    setDark((d) => {
+      const next = !d;
+      try { localStorage.setItem('theme', next ? 'dark' : 'light'); } catch (_) {}
+      return next;
+    });
   }, []);
 
   const toggleOutfit = useCallback(() => {

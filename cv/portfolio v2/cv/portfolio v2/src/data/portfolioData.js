@@ -83,6 +83,20 @@ export const portfolioData = {
         social: "Redes Sociales",
         presentation: "Sobre mí",
       },
+      personalLabels: {
+        nombre: "Nombre",
+        apellidos: "Apellidos",
+        rol: "Rol",
+        nacimiento: "Fecha de nacimiento",
+        email: "Email",
+        ubicacion: "Ubicación",
+      },
+      toolsLabels: {
+        ides: "IDEs & Editores",
+        frameworks: "Frameworks & Tecnologías",
+        languages: "Lenguajes de Programación",
+      },
+      viewOnGitHub: "Ver en GitHub",
     },
   },
   en: {
@@ -169,6 +183,20 @@ export const portfolioData = {
         social: "Social Media",
         presentation: "About Me",
       },
+      personalLabels: {
+        nombre: "First name",
+        apellidos: "Last name",
+        rol: "Role",
+        nacimiento: "Date of birth",
+        email: "Email",
+        ubicacion: "Location",
+      },
+      toolsLabels: {
+        ides: "IDEs & Editors",
+        frameworks: "Frameworks & Technologies",
+        languages: "Programming Languages",
+      },
+      viewOnGitHub: "View on GitHub",
     },
   },
 };
