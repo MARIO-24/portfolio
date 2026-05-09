@@ -281,7 +281,15 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; font-family: 'N
 
 /* ─── COMPACT BUTTONS on móvil ─── */
 @media (max-width: 800px) {
-  .hud-title { display: none; }
+  .hud-title {
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    top: 12px;
+    max-width: calc(100vw - 130px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   .hud-controls { top: 12px; right: 12px; gap: 6px; }
   .hud-btn {
     padding: 10px;

@@ -95,6 +95,15 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
 
       {/* Botones arriba derecha — solo emoji en móvil */}
       <div className="hud-controls">
+        {isMobile && (
+          <button
+            className="hud-btn"
+            title="Salir del portfolio 3D"
+            onClick={() => { if (window.opener) { window.close(); } else { window.history.back(); } }}
+          >
+            🚪
+          </button>
+        )}
         <button className="hud-btn" onClick={onDarkToggle} title={dark ? 'Modo Claro' : 'Modo Oscuro'}>
           {isMobile ? (dark ? '☀️' : '🌙') : (dark ? '☀️ Modo Claro' : '🌙 Modo Oscuro')}
         </button>

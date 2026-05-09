@@ -267,8 +267,8 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
         onInteract={() => onInteract('social')}
       />
 
-      {/* Interruptor — pared izquierda, junto al perchero */}
-      <group position={[-5.35, 1.3, 0.5]} rotation={[0, Math.PI / 2, 0]}>
+      {/* Interruptor — pared izquierda, separado del mapamundi */}
+      <group position={[-5.35, 1.3, -0.8]} rotation={[0, Math.PI / 2, 0]}>
         <LightSwitch
           position={[0, 0, 0]}
           dark={dark}
