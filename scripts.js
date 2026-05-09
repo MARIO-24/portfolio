@@ -236,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open(base + src3d, '_blank', 'noopener');
       return;
     }
+    const wasLoaded = loaded;
     if (!loaded) { iframe.src = src3d; loaded = true; }
     overlay.classList.add('visible');
     overlay.removeAttribute('aria-hidden');
@@ -243,11 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (icon)  { icon.className = 'fa-solid fa-xmark'; }
     document.body.style.overflow = 'hidden';
     if (navMain) navMain.classList.remove('open');
-    // Reiniciar música en el iframe (si ya está cargado)
-    if (loaded) {
+    // Si el iframe ya estaba cargado, enviar START_MUSIC directamente
+    // Si es primera carga, el handler de IFRAME_READY lo enviará cuando esté listo
+    if (wasLoaded) {
       setTimeout(() => {
         try { iframe.contentWindow?.postMessage({ type: 'START_MUSIC' }, '*'); } catch(_) {}
-      }, 300);
+      }, 50);
     }
   }
 
@@ -450,11 +452,20 @@ document.addEventListener('DOMContentLoaded', () => {
     try { iframe3d?.contentWindow?.postMessage({ type: 'MUTE_SYNC', muted }, '*'); } catch(_) {}
   });
 
-  // Sincronizar cuando el iframe 3D cambia el estado de mute
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'soundMuted') {
-      muted = e.newValue === 'true';
+  // Sincronizar cuando el iframe 3D cambia el mute o notifica que está listo
+  window.addEventListener('message', (e) => {
+    const { type, muted: iframeMuted } = e.data || {};
+    if (type === 'MUTE_SYNC' && typeof iframeMuted === 'boolean') {
+      // El 3D cambió el mute — actualizar UI del 2D
+      muted = iframeMuted;
+      localStorage.setItem('soundMuted', muted);
       applyMuteUI();
+    }
+    if (type === 'IFRAME_READY') {
+      // El iframe acaba de montar — enviar START_MUSIC si el overlay está visible
+      if (overlay.classList.contains('visible')) {
+        try { iframe.contentWindow?.postMessage({ type: 'START_MUSIC' }, '*'); } catch(_) {}
+      }
     }
   });
 
