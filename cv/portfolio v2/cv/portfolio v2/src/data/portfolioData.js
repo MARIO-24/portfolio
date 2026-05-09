@@ -10,7 +10,7 @@ export const portfolioData = {
       apellidos: "Sánchez Rufino",
       rol: "Desarrollador de Aplicaciones Multiplataforma",
       nacimiento: "15/03/2004",
-      email: "rufitodeveloper@email.com",
+      email: "mariosanxezr24@gmail.com",
       ubicacion: "España",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
     },
@@ -39,14 +39,14 @@ export const portfolioData = {
     projects: [
       {
         nombre: "HorusApp — TFG",
-        desc: "App móvil de fitness desarrollada con Flutter como TFG. Genera rutinas de entrenamiento personalizadas con IA (Google Gemini) y ofrece un chatbot entrenador personal 24/7. Firebase Auth, Firestore y Storage. Arquitectura limpia, bilingüe ES/EN.",
+        desc: "App de fitness con Flutter e IA (Gemini). Genera rutinas personalizadas y ofrece chatbot entrenador 24/7. Firebase Auth, Firestore y Storage.",
         url: "https://github.com/MARIO-24/Horus_app",
         img: "./imagenes/interfaz.png",
         tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
       },
       {
         nombre: "Camilo Meme V9",
-        desc: "App web interactiva con React y Firebase. El usuario puede registrarse, iniciar sesión y cuidar a Camilo, una mascota virtual. Desarrollado con Vite y TailwindCSS.",
+        desc: "App web con React y Firebase. Mascota virtual interactiva: regístrate y cuida a Camilo. Desarrollado con Vite y TailwindCSS.",
         url: "https://github.com/MARIO-24/CamiloMeme-V9",
         img: "./imagenes/proyectocamilo.png",
         tags: ["React", "Firebase", "Vite", "TailwindCSS"],
@@ -96,7 +96,7 @@ export const portfolioData = {
       apellidos: "Sánchez Rufino",
       rol: "Multiplatform Application Developer",
       nacimiento: "15/03/2004",
-      email: "rufitodeveloper@email.com",
+      email: "mariosanxezr24@gmail.com",
       ubicacion: "Spain",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
     },
@@ -125,14 +125,14 @@ export const portfolioData = {
     projects: [
       {
         nombre: "HorusApp — Final Project",
-        desc: "Fitness mobile app built with Flutter as Final Degree Project. Generates personalized training routines with AI (Google Gemini) and provides a 24/7 personal trainer chatbot. Firebase Auth, Firestore and Storage. Clean architecture, bilingual ES/EN.",
+        desc: "Flutter fitness app with AI (Gemini). Generates personalized routines and provides a 24/7 personal trainer chatbot. Firebase Auth, Firestore and Storage.",
         url: "https://github.com/MARIO-24/Horus_app",
         img: "./imagenes/interfaz.png",
         tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
       },
       {
         nombre: "Camilo Meme V9",
-        desc: "Interactive web app with React and Firebase. Users can register, log in and take care of Camilo, a virtual pet. Built with Vite and TailwindCSS.",
+        desc: "Web app with React and Firebase. Interactive virtual pet: register and take care of Camilo. Built with Vite and TailwindCSS.",
         url: "https://github.com/MARIO-24/CamiloMeme-V9",
         img: "./imagenes/proyectocamilo.png",
         tags: ["React", "Firebase", "Vite", "TailwindCSS"],
