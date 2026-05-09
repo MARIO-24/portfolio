@@ -41,7 +41,7 @@ export const portfolioData = {
         nombre: "HorusApp — TFG",
         desc: "App móvil de fitness desarrollada con Flutter como TFG. Genera rutinas de entrenamiento personalizadas con IA (Google Gemini) y ofrece un chatbot entrenador personal 24/7. Firebase Auth, Firestore y Storage. Arquitectura limpia, bilingüe ES/EN.",
         url: "https://github.com/MARIO-24/Horus_app",
-        img: "./imagenes/obras.png",
+        img: "./imagenes/interfaz.png",
         tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
       },
       {
@@ -127,7 +127,7 @@ export const portfolioData = {
         nombre: "HorusApp — Final Project",
         desc: "Fitness mobile app built with Flutter as Final Degree Project. Generates personalized training routines with AI (Google Gemini) and provides a 24/7 personal trainer chatbot. Firebase Auth, Firestore and Storage. Clean architecture, bilingual ES/EN.",
         url: "https://github.com/MARIO-24/Horus_app",
-        img: "./imagenes/obras.png",
+        img: "./imagenes/interfaz.png",
         tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
       },
       {
