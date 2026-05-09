@@ -2,14 +2,14 @@ export const portfolioData = {
   es: {
     presentation: {
       title: "¡Hola! Soy Mario 👋",
-      text: "Soy Mario Sánchez Rufino, estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM). Me especializo en frontend y diseño web, apasionado por crear interfaces atractivas y funcionales. También desarrollo apps móviles con Android Studio.\n\nEstoy buscando proyectos innovadores y desafiantes donde seguir creciendo y aportar valor real.\n\n🎮 Explora la habitación interactuando con los objetos para conocerme mejor.",
+      text: "Soy Mario Sánchez Rufino, estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM). Me especializo en frontend y diseño web, apasionado por crear interfaces atractivas y funcionales. También desarrollo apps móviles con Flutter y Dart.\n\nComo TFG desarrollé HorusApp, una app de fitness con IA (Google Gemini) que genera rutinas personalizadas y ofrece un chatbot entrenador personal 24/7.\n\nEstoy buscando proyectos innovadores y desafiantes donde seguir creciendo y aportar valor real.\n\n🎮 Explora la habitación interactuando con los objetos para conocerme mejor.",
       avatar: "./imagenes/rufito.png",
     },
     personal: {
       nombre: "Mario",
       apellidos: "Sánchez Rufino",
       rol: "Desarrollador de Aplicaciones Multiplataforma",
-      nacimiento: "Información privada",
+      nacimiento: "15/03/2004",
       email: "rufitodeveloper@email.com",
       ubicacion: "España",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
@@ -23,6 +23,7 @@ export const portfolioData = {
       ],
       frameworks: [
         { name: "React", img: "./imagenes/react.png" },
+        { name: "Flutter", img: "./imagenes/flutter.svg" },
         { name: "MySQL", img: "./imagenes/mysql.png" },
       ],
       languages: [
@@ -30,11 +31,19 @@ export const portfolioData = {
         { name: "Java", img: "./imagenes/java.png" },
         { name: "Kotlin", img: "./imagenes/kotlin.png" },
         { name: "Python", img: "./imagenes/python.png" },
+        { name: "Dart", img: "./imagenes/dart.svg" },
         { name: "HTML", img: "./imagenes/html.png" },
         { name: "CSS", img: "./imagenes/css.png" },
       ],
     },
     projects: [
+      {
+        nombre: "HorusApp — TFG",
+        desc: "App móvil de fitness desarrollada con Flutter como TFG. Genera rutinas de entrenamiento personalizadas con IA (Google Gemini) y ofrece un chatbot entrenador personal 24/7. Firebase Auth, Firestore y Storage. Arquitectura limpia, bilingüe ES/EN.",
+        url: "https://github.com/MARIO-24/Horus_app",
+        img: "./imagenes/obras.png",
+        tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
+      },
       {
         nombre: "Camilo Meme V9",
         desc: "App web interactiva con React y Firebase. El usuario puede registrarse, iniciar sesión y cuidar a Camilo, una mascota virtual. Desarrollado con Vite y TailwindCSS.",
@@ -79,14 +88,14 @@ export const portfolioData = {
   en: {
     presentation: {
       title: "Hi! I'm Mario 👋",
-      text: "I'm Mario Sánchez Rufino, a Multiplatform Application Development student (DAM). I specialize in frontend and web design, passionate about creating attractive and functional interfaces. I also develop mobile apps with Android Studio.\n\nI'm looking for innovative and challenging projects where I can keep growing and add real value.\n\n🎮 Explore the room by interacting with objects to learn more about me.",
+      text: "I'm Mario Sánchez Rufino, a Multiplatform Application Development student (DAM). I specialize in frontend and web design, passionate about creating attractive and functional interfaces. I also develop mobile apps with Flutter and Dart.\n\nFor my Final Degree Project I built HorusApp, a fitness app with AI (Google Gemini) that generates personalized training routines and provides a 24/7 personal trainer chatbot.\n\nI'm looking for innovative and challenging projects where I can keep growing and add real value.\n\n🎮 Explore the room by interacting with objects to learn more about me.",
       avatar: "./imagenes/rufito.png",
     },
     personal: {
       nombre: "Mario",
       apellidos: "Sánchez Rufino",
       rol: "Multiplatform Application Developer",
-      nacimiento: "Private information",
+      nacimiento: "15/03/2004",
       email: "rufitodeveloper@email.com",
       ubicacion: "Spain",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
@@ -100,6 +109,7 @@ export const portfolioData = {
       ],
       frameworks: [
         { name: "React", img: "./imagenes/react.png" },
+        { name: "Flutter", img: "./imagenes/flutter.svg" },
         { name: "MySQL", img: "./imagenes/mysql.png" },
       ],
       languages: [
@@ -107,11 +117,19 @@ export const portfolioData = {
         { name: "Java", img: "./imagenes/java.png" },
         { name: "Kotlin", img: "./imagenes/kotlin.png" },
         { name: "Python", img: "./imagenes/python.png" },
+        { name: "Dart", img: "./imagenes/dart.svg" },
         { name: "HTML", img: "./imagenes/html.png" },
         { name: "CSS", img: "./imagenes/css.png" },
       ],
     },
     projects: [
+      {
+        nombre: "HorusApp — Final Project",
+        desc: "Fitness mobile app built with Flutter as Final Degree Project. Generates personalized training routines with AI (Google Gemini) and provides a 24/7 personal trainer chatbot. Firebase Auth, Firestore and Storage. Clean architecture, bilingual ES/EN.",
+        url: "https://github.com/MARIO-24/Horus_app",
+        img: "./imagenes/obras.png",
+        tags: ["Flutter", "Dart", "Firebase", "Gemini AI"],
+      },
       {
         nombre: "Camilo Meme V9",
         desc: "Interactive web app with React and Firebase. Users can register, log in and take care of Camilo, a virtual pet. Built with Vite and TailwindCSS.",
