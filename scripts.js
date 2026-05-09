@@ -440,27 +440,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function lightningPoints(startX, startY, endY) {
+    const pts = [{ x: startX, y: startY }];
+    const segs = 9 + Math.floor(Math.random() * 6);
+    const stepH = (endY - startY) / segs;
+    let x = startX;
+    for (let i = 1; i <= segs; i++) {
+      const spread = 10 + (i / segs) * 55;
+      x += (Math.random() - 0.5) * spread * 2;
+      x = Math.max(10, Math.min(window.innerWidth - 10, x));
+      pts.push({ x, y: startY + stepH * i });
+    }
+    return pts;
+  }
+
+  function ptsToD(pts) {
+    return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  }
+
+  function makeBolt(svg, pts, strokeColor, width, filterId) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const p = document.createElementNS(ns, 'path');
+    p.setAttribute('d', ptsToD(pts));
+    p.setAttribute('stroke', strokeColor);
+    p.setAttribute('stroke-width', String(width));
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke-linecap', 'round');
+    p.setAttribute('stroke-linejoin', 'round');
+    if (filterId) p.setAttribute('filter', `url(#${filterId})`);
+    svg.appendChild(p);
+  }
+
   function spawnLightning(cx, cy) {
-    const COUNT = 10;
-    const pageBottom = window.innerHeight;
-    for (let i = 0; i < COUNT; i++) {
-      const el = document.createElement('div');
-      el.className = 'lightning-particle';
-      const height = 60 + Math.random() * 80;
-      const xOff   = (Math.random() - 0.5) * 200;
-      const drop   = (pageBottom - cy) * (0.85 + Math.random() * 0.35); // reaches bottom
-      const dur    = 1.0 + Math.random() * 0.6;
-      const delay  = Math.random() * 0.3;
-      el.style.cssText = `
-        height:${height}px;
-        left:${cx + xOff}px;
-        top:${cy}px;
-        --drop:${drop}px;
-        --dur:${dur}s;
-        animation-delay:${delay}s;
-      `;
-      wrap.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
+    const ns = 'http://www.w3.org/2000/svg';
+    const COUNT = 4;
+    const endY = window.innerHeight + 30;
+
+    for (let b = 0; b < COUNT; b++) {
+      const bDelay = b * 85 + Math.random() * 40;
+      setTimeout(() => {
+        const svg = document.createElementNS(ns, 'svg');
+        svg.classList.add('lightning-svg');
+        const dur = 0.55 + Math.random() * 0.35;
+        svg.style.setProperty('--dur', `${dur}s`);
+        svg.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
+
+        // Glow filter
+        const filterId = `lf${Date.now()}${b}`;
+        const defs = document.createElementNS(ns, 'defs');
+        const filt = document.createElementNS(ns, 'filter');
+        filt.setAttribute('id', filterId);
+        filt.setAttribute('x', '-60%'); filt.setAttribute('y', '-10%');
+        filt.setAttribute('width', '220%'); filt.setAttribute('height', '120%');
+        const blur = document.createElementNS(ns, 'feGaussianBlur');
+        blur.setAttribute('in', 'SourceGraphic');
+        blur.setAttribute('stdDeviation', '5');
+        filt.appendChild(blur);
+        defs.appendChild(filt);
+        svg.appendChild(defs);
+
+        // Main bolt
+        const startX = cx + (Math.random() - 0.5) * 70;
+        const mainPts = lightningPoints(startX, cy, endY);
+        makeBolt(svg, mainPts, '#9966ff', 12, filterId);   // outer glow
+        makeBolt(svg, mainPts, '#c4aaff', 5,  filterId);   // mid glow
+        makeBolt(svg, mainPts, '#ffffff', 2.5, null);       // bright core
+        makeBolt(svg, mainPts, '#eee8ff', 1,  null);        // inner white
+
+        // 1-2 branches
+        const brCount = 1 + Math.floor(Math.random() * 2);
+        for (let br = 0; br < brCount; br++) {
+          const fromIdx = Math.floor(mainPts.length * 0.3 + Math.random() * mainPts.length * 0.45);
+          const from = mainPts[fromIdx];
+          const brEnd = from.y + (endY - from.y) * (0.25 + Math.random() * 0.4);
+          const brPts = lightningPoints(from.x, from.y, brEnd);
+          makeBolt(svg, brPts, '#7744dd', 7,  filterId);
+          makeBolt(svg, brPts, 'rgba(210,195,255,0.8)', 1.5, null);
+        }
+
+        wrap.appendChild(svg);
+        svg.addEventListener('animationend', () => svg.remove());
+      }, bDelay);
     }
   }
 

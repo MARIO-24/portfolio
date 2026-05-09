@@ -263,33 +263,23 @@ button { font-family: inherit; }
   100% { transform: translateY(var(--rise, -220px)) scale(0.3); opacity: 0; }
 }
 
-/* ── Lightning particle (dark mode) ── */
-.lightning-particle {
+/* ── Lightning SVG (dark mode) ── */
+.lightning-svg {
   position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   pointer-events: none;
   z-index: 9999;
-  width: 3px;
-  border-radius: 2px;
-  background: linear-gradient(to bottom, #ffffff, #aaaaff, #6655ff);
-  box-shadow: 0 0 6px 2px rgba(140,120,255,0.9), 0 0 18px 4px rgba(100,80,255,0.5);
-  animation: lightning-strike var(--dur, 0.55s) ease-in forwards;
-  transform-origin: top center;
+  overflow: visible;
+  animation: lightning-svg-flash var(--dur, 0.7s) ease-out forwards;
 }
-.lightning-particle::after {
-  content: '';
-  position: absolute;
-  bottom: -6px; left: 50%;
-  transform: translateX(-50%);
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: rgba(180,160,255,0.85);
-  box-shadow: 0 0 12px 6px rgba(140,120,255,0.7);
-}
-@keyframes lightning-strike {
-  0%   { transform: scaleY(0) translateY(-8px); opacity: 1; }
-  30%  { transform: scaleY(1) translateY(0);    opacity: 1; }
-  60%  { opacity: 0.8; }
-  100% { transform: scaleY(1) translateY(var(--drop, 180px)); opacity: 0; }
+@keyframes lightning-svg-flash {
+  0%   { opacity: 1; }
+  12%  { opacity: 0.15; }
+  22%  { opacity: 1; }
+  38%  { opacity: 0.6; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════════
