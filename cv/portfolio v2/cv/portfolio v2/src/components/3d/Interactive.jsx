@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 
 /** Wrapper interactivo reutilizable para objetos 3D */
-export function Interactive({ children, label, onInteract, hoverScale = 1.04 }) {
+export function Interactive({ children, label, onInteract, hoverScale = 1.04, labelOffset = [0, 2.6, 0] }) {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef();
 
@@ -25,7 +25,7 @@ export function Interactive({ children, label, onInteract, hoverScale = 1.04 }) 
     >
       {children}
       {hovered && (
-        <Html center position={[0, 2.6, 0]} style={{ pointerEvents: 'none' }}>
+        <Html center position={labelOffset} style={{ pointerEvents: 'none' }}>
           <div className="hint-label">{label}</div>
         </Html>
       )}

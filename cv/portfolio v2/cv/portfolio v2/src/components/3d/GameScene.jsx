@@ -39,10 +39,29 @@ function checkCollision(x, z) {
   );
 }
 
+// Iconos SVG pequeños para los hints de teclado "E"
+const S16 = (paths) => (
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+    style={{ display: 'inline-block', flexShrink: 0 }}>
+    {paths.map((d, i) => <path key={i} d={d} />)}
+  </svg>
+);
+const ICO = {
+  monitor: S16(['M2 3h20v14H2z','M8 21h8','M12 17v4']),
+  user:    S16(['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2','M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']),
+  wrench:  S16(['M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z']),
+  hanger:  S16(['M20.38 19H3.62a1 1 0 0 1-.75-1.67L12 8','M12 8V5','M12 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2z']),
+  info:    S16(['M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z','M12 16v-4','M12 8h.01']),
+  send:    S16(['M22 2L11 13','M22 2L15 22l-4-9-9-4 20-7z']),
+  sun:     S16(['M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z','M12 1v2','M12 21v2','M4.22 4.22l1.42 1.42','M18.36 18.36l1.42 1.42','M1 12h2','M21 12h2','M4.22 19.78l1.42-1.42','M18.36 5.64l1.42-1.42']),
+  globe:   S16(['M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z','M2 12h20','M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z']),
+};
+
 // Indicador flotante "Pulsa E" sobre el personaje cuando está cerca de un objeto
 function NearHint({ charPos, zones, modalOpen }) {
   const groupRef = useRef();
-  const [label, setLabel] = useState(null);
+  const [zone, setZone] = useState(null);
   const prevLabel = useRef(null);
 
   useFrame(() => {
@@ -63,15 +82,15 @@ function NearHint({ charPos, zones, modalOpen }) {
     const next = nearest ? nearest.label : null;
     if (next !== prevLabel.current) {
       prevLabel.current = next;
-      setLabel(next);
+      setZone(nearest || null);
     }
   });
 
   return (
     <group ref={groupRef} position={[0, 2.2, 0]}>
-      {label && (
+      {zone && (
         <Html center distanceFactor={8}>
-          <div className="hint-e">E — {label}</div>
+          <div className="hint-e">E — {zone.icon} {zone.label}</div>
         </Html>
       )}
     </group>
@@ -116,14 +135,14 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
 
   // Zonas de interaccion — se actualizan en cada render para tener acciones frescas
   zonesRef.current = [
-    { pos: [-0.5, 0, -3.5], range: 2.2, label: uiData.objects.pc,       action: () => onInteract('projects') },
-    { pos: [-1.0, 0,  2.8], range: 1.8, label: uiData.objects.laptop,   action: () => onInteract('personal') },
-    { pos: [ 4.5, 0, -4.0], range: 2.0, label: uiData.objects.shelf,    action: () => onInteract('tools') },
-    { pos: [-5.0, 0, -1.2], range: 2.0, label: uiData.objects.wardrobe, action: onOutfitToggle },
-    { pos: [ 4.5, 0,  0.3], range: 1.7, label: uiData.objects.bed,      action: () => onInteract('presentation') },
-    { pos: [ 5.0, 0,  1.7], range: 1.4, label: uiData.objects.mobile,   action: () => onInteract('social') },
-    { pos: [-5.35, 1.3, 0.5], range: 1.8, label: uiData.objects.light,  action: onDarkToggle },
-    { pos: [-5.35, 1.3, 2.0], range: 1.8, label: uiData.objects.poster, action: onLangToggle },
+    { pos: [-0.5, 0, -3.5], range: 2.2, label: uiData.objects.pc,       icon: ICO.monitor, action: () => onInteract('projects') },
+    { pos: [-1.0, 0,  2.8], range: 1.8, label: uiData.objects.laptop,   icon: ICO.user,    action: () => onInteract('personal') },
+    { pos: [ 4.5, 0, -4.0], range: 2.0, label: uiData.objects.shelf,    icon: ICO.wrench,  action: () => onInteract('tools') },
+    { pos: [-5.0, 0, -1.2], range: 2.0, label: uiData.objects.wardrobe, icon: ICO.hanger,  action: onOutfitToggle },
+    { pos: [ 4.5, 0,  0.3], range: 1.7, label: uiData.objects.bed,      icon: ICO.info,    action: () => onInteract('presentation') },
+    { pos: [ 5.0, 0,  1.7], range: 1.4, label: uiData.objects.mobile,   icon: ICO.send,    action: () => onInteract('social') },
+    { pos: [-5.35, 1.3, 0.5], range: 1.8, label: uiData.objects.light,  icon: ICO.sun,     action: onDarkToggle },
+    { pos: [-5.35, 1.3, 2.0], range: 1.8, label: uiData.objects.poster, icon: ICO.globe,   action: onLangToggle },
   ];
 
   // Manejador de tecla E — siempre fresco
@@ -279,19 +298,46 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
         />
       </group>
 
-      {/* Poster mapamundi — plano invisible clickeable sobre la pared izquierda */}
-      <Interactive
-        label={uiData.objects.poster}
-        onInteract={onLangToggle}
-        hoverScale={1.03}
-      >
-        <group position={[-5.38, 2.20, 2.50]} rotation={[0, Math.PI / 2, 0]}>
+      {/* Poster mapamundi — geometría real + hover animation + click */}
+      <group position={[-5.44, 2.20, 2.50]}>
+        <Interactive
+          label={uiData.objects.poster}
+          onInteract={onLangToggle}
+          hoverScale={1.04}
+          labelOffset={[1.3, 0.6, 0]}
+        >
+          {/* Marco de madera */}
           <mesh>
-            <planeGeometry args={[1.40, 0.86]} />
-            <meshStandardMaterial transparent opacity={0} depthWrite={false} />
+            <boxGeometry args={[0.05, 0.96, 1.50]} />
+            <meshStandardMaterial color={dark ? '#2a1e10' : '#5a3a18'} roughness={0.8} />
           </mesh>
-        </group>
-      </Interactive>
+          {/* Fondo — océano azul */}
+          <mesh position={[0.03, 0, 0]}>
+            <boxGeometry args={[0.04, 0.86, 1.40]} />
+            <meshStandardMaterial color={'#2255aa'} roughness={0.9} emissive={'#1a3a7a'} emissiveIntensity={0.6} />
+          </mesh>
+          {/* Continente Europa/África */}
+          <mesh position={[0.055, 0.02, 0.15]}>
+            <boxGeometry args={[0.04, 0.38, 0.22]} />
+            <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
+          </mesh>
+          {/* Continente América */}
+          <mesh position={[0.055, -0.04, -0.30]}>
+            <boxGeometry args={[0.04, 0.42, 0.18]} />
+            <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
+          </mesh>
+          {/* Continente Asia */}
+          <mesh position={[0.055, 0.10, 0.40]}>
+            <boxGeometry args={[0.04, 0.24, 0.34]} />
+            <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
+          </mesh>
+          {/* Continente Oceanía */}
+          <mesh position={[0.055, -0.22, 0.55]}>
+            <boxGeometry args={[0.04, 0.12, 0.14]} />
+            <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
+          </mesh>
+        </Interactive>
+      </group>
     </>
   );
 }
