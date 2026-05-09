@@ -1,0 +1,270 @@
+import { useRef, useEffect, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
+import * as THREE from 'three';
+import { Room } from './Room';
+import { Character } from './Character';
+import { DesktopPC } from './DesktopPC';
+import { Laptop } from './Laptop';
+import { Bookshelf } from './Bookshelf';
+import { Bed } from './Bed';
+import { Wardrobe } from './Wardrobe';
+import { MobilePhone } from './MobilePhone';
+import { LightSwitch } from './LightSwitch';
+
+const CHAR_R = 0.45;
+
+// Cajas de colision AABB [xMin, xMax, zMin, zMax] — habitacion 11x9
+const OBSTACLES = [
+  [-6,    6,    -5.0, -4.45], // pared trasera
+  [-6,   -5.45, -5.0,  5.0 ], // pared izquierda
+  [-1.8,  0.8,  -4.35, -3.0], // mesa PC sobremesa (centrada)
+  [-0.9,  0.5,  -2.85, -2.15], // silla
+  [-1.6, -0.3,   2.0,   3.6 ], // portatil en el suelo
+  [ 3.9,  5.9,  -4.3,  -3.7], // estanteria
+  [-5.5, -4.35, -2.2,  -0.2], // armario
+  [ 3.4,  5.4,  -0.8,   1.4], // cama (rotada 90°, empujada al borde)
+  [ 4.7,  5.3,  -1.4,  -0.8], // mesilla 1 (cabecero)
+  [ 4.7,  5.3,   1.4,   2.0], // mesilla 2 (pie)
+  [ 0.85, 1.45, -3.2,  -2.7 ], // papelera
+  [-5.1,  -4.3, -4.1,  -3.3 ], // lampara retro
+];
+
+function checkCollision(x, z) {
+  return OBSTACLES.some(
+    ([xMin, xMax, zMin, zMax]) =>
+      x + CHAR_R > xMin && x - CHAR_R < xMax &&
+      z + CHAR_R > zMin && z - CHAR_R < zMax
+  );
+}
+
+// Indicador flotante "Pulsa E" sobre el personaje cuando está cerca de un objeto
+function NearHint({ charPos, zones, modalOpen }) {
+  const groupRef = useRef();
+  const [label, setLabel] = useState(null);
+  const prevLabel = useRef(null);
+
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.position.x = charPos.current.x;
+      groupRef.current.position.z = charPos.current.z;
+    }
+    let nearest = null;
+    let bestDist = Infinity;
+    if (!modalOpen) {
+      for (const z of zones.current) {
+        const dx = charPos.current.x - z.pos[0];
+        const dz = charPos.current.z - z.pos[2];
+        const d = Math.sqrt(dx * dx + dz * dz);
+        if (d < z.range && d < bestDist) { bestDist = d; nearest = z; }
+      }
+    }
+    const next = nearest ? nearest.label : null;
+    if (next !== prevLabel.current) {
+      prevLabel.current = next;
+      setLabel(next);
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[0, 2.2, 0]}>
+      {label && (
+        <Html center distanceFactor={8}>
+          <div className="hint-e">E — {label}</div>
+        </Html>
+      )}
+    </group>
+  );
+}
+
+export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile }) {
+  const keys = useRef({});
+  const charPos = useRef(new THREE.Vector3(0, 0, 0));
+  const charRotY = useRef(0);
+  const charRef = useRef();
+  const walkT = useRef(0);
+  const zonesRef = useRef([]);
+  const eHandlerRef = useRef(null);
+  const modalOpenRef = useRef(false);
+  const onCloseRef = useRef(null);
+  modalOpenRef.current = modalOpen;
+  onCloseRef.current = onClose;
+
+  // Teclado físico + D-pad virtual (ambos usan KeyboardEvent)
+  useEffect(() => {
+    const down = (e) => {
+      keys.current[e.code] = true;
+      if (e.code === 'KeyE') {
+        if (modalOpenRef.current) onCloseRef.current?.();
+        else if (eHandlerRef.current) eHandlerRef.current();
+      }
+    };
+    const up = (e) => { keys.current[e.code] = false; };
+    window.addEventListener('keydown', down);
+    window.addEventListener('keyup', up);
+    return () => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+    };
+  }, []);
+
+  // Zonas de interaccion — se actualizan en cada render para tener acciones frescas
+  zonesRef.current = [
+    { pos: [-0.5, 0, -3.5], range: 2.2, label: uiData.objects.pc,       action: () => onInteract('projects') },
+    { pos: [-1.0, 0,  2.8], range: 1.8, label: uiData.objects.laptop,   action: () => onInteract('personal') },
+    { pos: [ 4.5, 0, -4.0], range: 2.0, label: uiData.objects.shelf,    action: () => onInteract('tools') },
+    { pos: [-5.0, 0, -1.2], range: 2.0, label: uiData.objects.wardrobe, action: onOutfitToggle },
+    { pos: [ 4.5, 0,  0.3], range: 1.7, label: uiData.objects.bed,      action: () => onInteract('presentation') },
+    { pos: [ 5.0, 0,  1.7], range: 1.4, label: uiData.objects.mobile,   action: () => onInteract('social') },
+    { pos: [-5.35, 1.3, 0.5], range: 1.8, label: uiData.objects.light,  action: onDarkToggle },
+    { pos: [-5.35, 1.3, 1.4], range: 1.8, label: uiData.objects.poster, action: onLangToggle },
+  ];
+
+  // Manejador de tecla E — siempre fresco
+  eHandlerRef.current = () => {
+    let best = null, bestDist = Infinity;
+    for (const z of zonesRef.current) {
+      const dx = charPos.current.x - z.pos[0];
+      const dz = charPos.current.z - z.pos[2];
+      const d = Math.sqrt(dx * dx + dz * dz);
+      if (d < z.range && d < bestDist) { bestDist = d; best = z; }
+    }
+    if (best) best.action();
+  };
+
+  useFrame(({ camera }, delta) => {
+    const k = keys.current;
+    let dx = 0, dz = 0;
+    if (k['KeyW'] || k['ArrowUp'])    dz -= 1;
+    if (k['KeyS'] || k['ArrowDown'])  dz += 1;
+    if (k['KeyA'] || k['ArrowLeft'])  dx -= 1;
+    if (k['KeyD'] || k['ArrowRight']) dx += 1;
+
+    const moving = dx !== 0 || dz !== 0;
+    if (moving) {
+      const len = Math.sqrt(dx * dx + dz * dz);
+      dx /= len; dz /= len;
+      const speed = isMobile ? 2.2 : 3.5;
+      const nextX = Math.max(-5.0, Math.min(5.0, charPos.current.x + dx * speed * delta));
+      if (!checkCollision(nextX, charPos.current.z)) charPos.current.x = nextX;
+      const nextZ = Math.max(-4.0, Math.min(3.8, charPos.current.z + dz * speed * delta));
+      if (!checkCollision(charPos.current.x, nextZ)) charPos.current.z = nextZ;
+      charRotY.current = Math.atan2(dx, dz);
+      walkT.current += delta * (isMobile ? 5 : 8);
+    }
+
+    if (charRef.current) {
+      charRef.current.position.lerp(charPos.current, isMobile ? 0.25 : 0.18);
+      charRef.current.rotation.y += (charRotY.current - charRef.current.rotation.y) * (isMobile ? 0.28 : 0.2);
+    }
+
+    const camTarget = new THREE.Vector3(
+      charPos.current.x + (isMobile ? 4 : 5),
+      charPos.current.y + (isMobile ? 7 : 9),
+      charPos.current.z + (isMobile ? 6 : 8)
+    );
+    camera.position.lerp(camTarget, isMobile ? 0.07 : 0.04);
+    const lookAt = new THREE.Vector3(charPos.current.x, charPos.current.y + 1, charPos.current.z);
+    camera.lookAt(lookAt);
+  });
+
+  const lightColor      = dark ? '#aabbff' : '#fffbe6';
+  const ambientIntensity = dark ? 0.52 : 0.35;
+  const dirIntensity    = dark ? (isMobile ? 0.5 : 0.75) : (isMobile ? 0.5 : 0.7);
+  const pointIntensity  = dark ? (isMobile ? 0.7 : 1.0)  : (isMobile ? 0.8 : 1.2);
+
+  return (
+    <>
+      <ambientLight intensity={ambientIntensity} />
+      <directionalLight
+        position={[4, 10, 6]}
+        intensity={dirIntensity}
+        castShadow={!isMobile}
+        shadow-mapSize={isMobile ? [512, 512] : [2048, 2048]}
+        shadow-camera-near={0.5}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
+      <pointLight position={[0, 3.6, 0]} intensity={pointIntensity} color={lightColor} castShadow={!isMobile} />
+      <pointLight position={[-4, 2, -3]} intensity={dark ? 0.5 : 0.2} color={dark ? '#4466cc' : '#ffcc88'} />
+      {/* Luz que entra por la ventana */}
+      <pointLight position={[2.0, 2.4, -3.8]} intensity={dark ? 0.4 : 0.8} color={dark ? '#1a2a66' : '#d4eeff'} />
+      {/* Bombilla colgante — ilumina la habitacion en modo oscuro */}
+      {dark && <pointLight position={[0, 3.0, 0]} intensity={isMobile ? 1.2 : 2.2} color="#ffcc77" distance={9} decay={1.8} castShadow={!isMobile} />}
+      {/* Brillo pantalla PC ilumina la zona de la mesa */}
+      {dark && <pointLight position={[-0.3, 1.5, -3.2]} intensity={0.6} color="#4488ff" distance={3} decay={2} />}
+
+      <Room dark={dark} />
+      <Character charRef={charRef} dark={dark} lang={lang} outfit={outfit} walkT={walkT} />
+      <NearHint charPos={charPos} zones={zonesRef} modalOpen={modalOpen} />
+
+      {/* Ordenador sobremesa — centrado en la pared trasera */}
+      <DesktopPC
+        position={[-0.5, 0, -3.5]}
+        dark={dark}
+        label={uiData.objects.pc}
+        onInteract={() => onInteract('projects')}
+      />
+
+      {/* Portatil — en el suelo, lateral izquierdo de la alfombra, mirando hacia la cama */}
+      <Laptop
+        position={[-1.0, 0, 2.8]}
+        rotation={[0, Math.PI / 2, 0]}
+        dark={dark}
+        label={uiData.objects.laptop}
+        onInteract={() => onInteract('personal')}
+      />
+
+      {/* Estanteria — esquina trasera derecha */}
+      <Bookshelf
+        position={[4.5, 0, -4.0]}
+        dark={dark}
+        label={uiData.objects.shelf}
+        onInteract={() => onInteract('tools')}
+      />
+
+      {/* Armario — pared izquierda, puertas hacia la habitacion */}
+      <group position={[-5.0, 0, -1.2]} rotation={[0, Math.PI / 2, 0]}>
+        <Wardrobe
+          position={[0, 0, 0]}
+          dark={dark}
+          outfit={outfit}
+          label={uiData.objects.wardrobe}
+          onInteract={onOutfitToggle}
+        />
+      </group>
+
+      {/* Cama — rotada 90°, cabecero contra el borde derecho */}
+      <Bed
+        position={[4.5, 0, 0.3]}
+        rotation={[0, -Math.PI / 2, 0]}
+        dark={dark}
+        label={uiData.objects.bed}
+        onInteract={() => onInteract('presentation')}
+      />
+
+      {/* Movil — tumbado en la segunda mesita */}
+      <MobilePhone
+        position={[5.0, 0.71, 1.7]}
+        rotation={[Math.PI / 2, Math.PI, Math.PI / 2]}
+        dark={dark}
+        label={uiData.objects.mobile}
+        onInteract={() => onInteract('social')}
+      />
+
+      {/* Interruptor — pared izquierda, junto al perchero */}
+      <group position={[-5.35, 1.3, 0.5]} rotation={[0, Math.PI / 2, 0]}>
+        <LightSwitch
+          position={[0, 0, 0]}
+          dark={dark}
+          on={!dark}
+          label={uiData.objects.light}
+          onInteract={onDarkToggle}
+        />
+      </group>
+    </>
+  );
+}

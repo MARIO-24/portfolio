@@ -24,6 +24,7 @@
             <button class="nav-btn" data-target="habilidades">Habilidades</button>
             <button class="nav-btn" data-target="contactame">Contáctame</button>
             <a href="cv/CV Mario Sánchez Rufino.pdf" class="btn" target="_blank">Ver CV</a>
+            <button class="btn btn-3d" id="toggle-3d" aria-label="Activar vista 3D">🎮 Vista 3D</button>
         </div>
     </nav>
 
@@ -172,6 +173,19 @@
 </div>
 
 
+
+    <!-- Overlay 3D -->
+    <div id="overlay-3d" class="overlay-3d" aria-hidden="true">
+        <button id="close-3d" class="close-3d" aria-label="Cerrar vista 3D">✕ Salir del 3D</button>
+        <iframe
+            id="iframe-3d"
+            title="Portfolio 3D"
+            src=""
+            data-src="portfolio-3d/index.html"
+            allow="autoplay"
+            loading="lazy"
+        ></iframe>
+    </div>
 
     <script src="scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>

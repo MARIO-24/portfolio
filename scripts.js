@@ -5,6 +5,49 @@ menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
 
+// ─── TOGGLE VISTA 3D ───
+(function () {
+    const btn     = document.getElementById('toggle-3d');
+    const overlay = document.getElementById('overlay-3d');
+    const closeBtn = document.getElementById('close-3d');
+    const iframe  = document.getElementById('iframe-3d');
+    let loaded = false;
+
+    function open3D() {
+        // Carga el iframe la primera vez (lazy load)
+        if (!loaded) {
+            iframe.src = iframe.dataset.src;
+            loaded = true;
+        }
+        overlay.classList.add('visible');
+        overlay.removeAttribute('aria-hidden');
+        btn.classList.add('active');
+        btn.textContent = '✕ Vista Normal';
+        document.body.style.overflow = 'hidden';
+        navLinks.classList.remove('active');
+    }
+
+    function close3D() {
+        overlay.classList.remove('visible');
+        overlay.setAttribute('aria-hidden', 'true');
+        btn.classList.remove('active');
+        btn.textContent = '🎮 Vista 3D';
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', () => {
+        overlay.classList.contains('visible') ? close3D() : open3D();
+    });
+    closeBtn.addEventListener('click', close3D);
+
+    // Escape cierra el overlay
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('visible')) close3D();
+    });
+})();
+
+
+
 const navButtons = document.querySelectorAll('.nav-btn');
 
 navButtons.forEach(button => {
