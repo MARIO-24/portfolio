@@ -77,7 +77,7 @@ function NearHint({ charPos, zones, modalOpen }) {
   );
 }
 
-export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile, joystickRef, interactRef }) {
+export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile, joystickRef }) {
   const keys = useRef({});
   const charPos = useRef(new THREE.Vector3(0, 0, 0));
   const charRotY = useRef(0);
@@ -136,8 +136,6 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     }
     if (best) best.action();
   };
-  // Exponer el handler para el botón E móvil
-  if (interactRef) interactRef.current = eHandlerRef.current;
 
   useFrame(({ camera }, delta) => {
     const k = keys.current;

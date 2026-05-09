@@ -44,7 +44,6 @@ function App() {
   }, []);
 
   const joystickRef  = useRef({ x: 0, y: 0 });
-  const interactRef  = useRef(null); // GameScene escribe aquí su handler de E
 
   return (
     <div className={'app' + (dark ? ' dark' : '')}>
@@ -69,7 +68,6 @@ function App() {
           uiData={data.ui}
           isMobile={isMobile}
           joystickRef={joystickRef}
-          interactRef={interactRef}
         />
       </Canvas>
 
@@ -82,7 +80,7 @@ function App() {
         />
       )}
 
-      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} onInteract={() => interactRef.current?.()} />
+      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} />
     </div>
   );
 }

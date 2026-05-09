@@ -69,15 +69,23 @@ function Joystick({ joystickRef, onInteract }) {
       <div ref={baseRef} className="joystick-base">
         <div ref={knobRef} className="joystick-knob" />
       </div>
-      {/* Botón E (interactuar) */}
-      <button className="joystick-e" onTouchStart={(e) => { e.preventDefault(); onInteract?.(); }}>
+      {/* Botón E (interactuar / cerrar modal) */}
+      <button
+        className="joystick-e"
+        onClick={() => {
+          window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE', bubbles: true }));
+          setTimeout(() => {
+            window.dispatchEvent(new KeyboardEvent('keyup', { code: 'KeyE', bubbles: true }));
+          }, 80);
+        }}
+      >
         E
       </button>
     </div>
   );
 }
 
-export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, joystickRef, onInteract }) {
+export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, joystickRef }) {
   return (
     <>
       {/* Título arriba centro */}
