@@ -11,7 +11,7 @@ export const portfolioData = {
       rol: "Desarrollador de Aplicaciones Multiplataforma",
       nacimiento: "15/03/2004",
       email: "mariosanxezr24@gmail.com",
-      ubicacion: "España",
+      ubicacion: "Madrid / Cádiz",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
     },
     tools: {
@@ -97,7 +97,7 @@ export const portfolioData = {
       rol: "Multiplatform Application Developer",
       nacimiento: "15/03/2004",
       email: "mariosanxezr24@gmail.com",
-      ubicacion: "Spain",
+      ubicacion: "Madrid / Cádiz",
       cv: "./cv/CV Mario Sánchez Rufino.pdf",
     },
     tools: {
