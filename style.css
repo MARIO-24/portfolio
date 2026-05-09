@@ -44,13 +44,17 @@
    RESET & BASE
 ═══════════════════════════════════════════════ */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+  transition: background var(--transition);
+}
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   line-height: 1.65;
-  transition: background var(--transition), color var(--transition);
+  transition: color var(--transition);
   overflow-x: hidden;
 }
 img { display: block; max-width: 100%; }
@@ -195,7 +199,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; flex-direction: row;
   gap: 64px; padding: 80px 24px;
   max-width: 1200px; margin: 0 auto;
-  position: relative; z-index: 1;
+  position: relative;
   overflow: hidden;
 }
 
@@ -254,7 +258,7 @@ button { font-family: inherit; }
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   animation: bubble-rise var(--dur, 1.2s) ease-out forwards;
 }
 @keyframes bubble-rise {
@@ -269,7 +273,7 @@ button { font-family: inherit; }
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   overflow: visible;
   animation: lightning-svg-flash var(--dur, 0.7s) ease-out forwards;
 }
