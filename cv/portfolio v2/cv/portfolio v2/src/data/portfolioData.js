@@ -1,8 +1,8 @@
 export const portfolioData = {
   es: {
     presentation: {
-      title: "¡Hola! Soy Mario 👋",
-      text: "Soy Mario Sánchez Rufino, estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM). Me especializo en frontend y diseño web, apasionado por crear interfaces atractivas y funcionales. También desarrollo apps móviles con Flutter y Dart.\n\nComo TFG desarrollé HorusApp, una app de fitness con IA (Google Gemini) que genera rutinas personalizadas y ofrece un chatbot entrenador personal 24/7.\n\nEstoy buscando proyectos innovadores y desafiantes donde seguir creciendo y aportar valor real.\n\n🎮 Explora la habitación interactuando con los objetos para conocerme mejor.",
+      title: "¡Hola! Soy Mario",
+      text: "Soy Mario Sánchez Rufino, estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM). Me especializo en frontend y diseño web, apasionado por crear interfaces atractivas y funcionales. También desarrollo apps móviles con Flutter y Dart.\n\nComo TFG desarrollé HorusApp, una app de fitness con IA (Google Gemini) que genera rutinas personalizadas y ofrece un chatbot entrenador personal 24/7.\n\nEstoy buscando proyectos innovadores y desafiantes donde seguir creciendo y aportar valor real.\n\nExplora la habitación interactuando con los objetos para conocerme mejor.",
       avatar: "./imagenes/rufito.png",
     },
     personal: {
@@ -64,17 +64,17 @@ export const portfolioData = {
       explore: "Explora la habitación e interactúa con los objetos",
       controls: "WASD / ↑↓←→ para mover al personaje · Click en objetos para interactuar",
       close: "Cerrar",
-      download: "📄 Descargar CV",
-      langToggle: "Switch to English 🇬🇧",
+      download: "Descargar CV",
+      langToggle: "Switch to English",
       objects: {
-        pc: "🖥️ Proyectos",
-        laptop: "💻 Info Personal",
-        shelf: "📚 Habilidades",
-        bed: "🛏️ Sobre mí",
-        wardrobe: "� Ropa",
-        poster:   "🗺️ Idioma",
-        mobile: "📱 Redes Sociales",
-        light: "💡 Luz",
+        pc: "Proyectos",
+        laptop: "Info Personal",
+        shelf: "Habilidades",
+        bed: "Sobre mí",
+        wardrobe: "Ropa",
+        poster:   "Idioma",
+        mobile: "Redes Sociales",
+        light: "Luz",
       },
       sections: {
         projects: "Mis Proyectos",
@@ -87,8 +87,8 @@ export const portfolioData = {
   },
   en: {
     presentation: {
-      title: "Hi! I'm Mario 👋",
-      text: "I'm Mario Sánchez Rufino, a Multiplatform Application Development student (DAM). I specialize in frontend and web design, passionate about creating attractive and functional interfaces. I also develop mobile apps with Flutter and Dart.\n\nFor my Final Degree Project I built HorusApp, a fitness app with AI (Google Gemini) that generates personalized training routines and provides a 24/7 personal trainer chatbot.\n\nI'm looking for innovative and challenging projects where I can keep growing and add real value.\n\n🎮 Explore the room by interacting with objects to learn more about me.",
+      title: "Hi! I'm Mario",
+      text: "I'm Mario Sánchez Rufino, a Multiplatform Application Development student (DAM). I specialize in frontend and web design, passionate about creating attractive and functional interfaces. I also develop mobile apps with Flutter and Dart.\n\nFor my Final Degree Project I built HorusApp, a fitness app with AI (Google Gemini) that generates personalized training routines and provides a 24/7 personal trainer chatbot.\n\nI'm looking for innovative and challenging projects where I can keep growing and add real value.\n\nExplore the room by interacting with objects to learn more about me.",
       avatar: "./imagenes/rufito.png",
     },
     personal: {
@@ -150,17 +150,17 @@ export const portfolioData = {
       explore: "Explore the room and interact with objects",
       controls: "WASD / Arrow keys to move · Click objects to interact",
       close: "Close",
-      download: "📄 Download CV",
-      langToggle: "Cambiar a Español 🇪🇸",
+      download: "Download CV",
+      langToggle: "Cambiar a Español",
       objects: {
-        pc: "🖥️ Projects",
-        laptop: "💻 Personal Info",
-        shelf: "📚 Skills",
-        bed: "🛏️ About me",
-        wardrobe: "� Outfit",
-        poster:   "🗺️ Language",
-        mobile: "📱 Social Media",
-        light: "💡 Light",
+        pc: "Projects",
+        laptop: "Personal Info",
+        shelf: "Skills",
+        bed: "About me",
+        wardrobe: "Outfit",
+        poster:   "Language",
+        mobile: "Social Media",
+        light: "Light",
       },
       sections: {
         projects: "My Projects",

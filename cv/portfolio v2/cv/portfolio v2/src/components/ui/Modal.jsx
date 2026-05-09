@@ -88,7 +88,7 @@ function PresentationContent({ data, onClose }) {
 function ProjectsContent({ data }) {
   return (
     <>
-      <div className="modal-title">🖥️ {data.ui.sections.projects}</div>
+      <div className="modal-title">{data.ui.sections.projects}</div>
       <div className="projects-grid">
         {data.projects.map((p, i) => (
           <div key={i} className="project-card">
@@ -121,32 +121,32 @@ function PersonalContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">💻 {ui.sections.personal}</div>
+      <div className="modal-title">{ui.sections.personal}</div>
       <div className="personal-grid">
         <div className="personal-card">
-          <div className="personal-card-label">👤 Nombre</div>
+          <div className="personal-card-label">Nombre</div>
           <div className="personal-card-value">{p.nombre}</div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">👤 Apellidos</div>
+          <div className="personal-card-label">Apellidos</div>
           <div className="personal-card-value">{p.apellidos}</div>
         </div>
         <div className="personal-card personal-card--full">
-          <div className="personal-card-label">💼 Rol</div>
+          <div className="personal-card-label">Rol</div>
           <div className="personal-card-value">{p.rol}</div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">🎂 Nacimiento</div>
+          <div className="personal-card-label">Fecha de nacimiento</div>
           <div className="personal-card-value">{p.nacimiento}</div>
         </div>
         <div className="personal-card personal-card--full">
-          <div className="personal-card-label">✉️ Email</div>
+          <div className="personal-card-label">Email</div>
           <div className="personal-card-value">
             <a href={`mailto:${p.email}`} className="personal-email-link">{p.email}</a>
           </div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">📍 Ubicación</div>
+          <div className="personal-card-label">Ubicación</div>
           <div className="personal-card-value">{p.ubicacion}</div>
         </div>
       </div>
@@ -162,10 +162,10 @@ function ToolsContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">📚 {ui.sections.tools}</div>
+      <div className="modal-title">{ui.sections.tools}</div>
 
       <div className="tools-section">
-        <div className="tools-section-title">💻 IDEs & Editores</div>
+        <div className="tools-section-title">IDEs &amp; Editores</div>
         <div className="tools-grid">
           {tools.ides.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -177,7 +177,7 @@ function ToolsContent({ data }) {
       </div>
 
       <div className="tools-section">
-        <div className="tools-section-title">⚙️ Frameworks & Tecnologías</div>
+        <div className="tools-section-title">Frameworks &amp; Tecnologías</div>
         <div className="tools-grid">
           {tools.frameworks.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -189,7 +189,7 @@ function ToolsContent({ data }) {
       </div>
 
       <div className="tools-section">
-        <div className="tools-section-title">🔤 Lenguajes de Programación</div>
+        <div className="tools-section-title">Lenguajes de Programación</div>
         <div className="tools-grid">
           {tools.languages.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -207,7 +207,7 @@ function SocialContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">📱 {ui.sections.social}</div>
+      <div className="modal-title">{ui.sections.social}</div>
       <div className="social-grid">
         {data.social.map((s, i) => (
           <a

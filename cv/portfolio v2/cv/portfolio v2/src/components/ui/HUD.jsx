@@ -96,10 +96,23 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
       {/* Botones arriba derecha — solo emoji en móvil */}
       <div className="hud-controls">
         <button className="hud-btn" onClick={onDarkToggle} title={dark ? 'Modo Claro' : 'Modo Oscuro'}>
-          {isMobile ? (dark ? '☀️' : '🌙') : (dark ? '☀️ Modo Claro' : '🌙 Modo Oscuro')}
+          {dark ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+              <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+              <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+              <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+          {!isMobile && <span style={{marginLeft:6}}>{dark ? 'Modo Claro' : 'Modo Oscuro'}</span>}
         </button>
         <button className="hud-btn" onClick={onLangToggle} title={data.ui.langToggle}>
-          {isMobile ? (lang === 'es' ? '🇬🇧' : '🇪🇸') : data.ui.langToggle}
+          {lang === 'es' ? 'EN' : 'ES'}
         </button>
         {isMobile && (
           <button
@@ -109,7 +122,11 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
               window.location.href = new URL('../', window.location.href).href;
             }}
           >
-            🚪
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
           </button>
         )}
       </div>
@@ -125,7 +142,10 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
             {lang === 'es' ? 'mover personaje' : 'move character'}
           </span>
           <span className="hud-divider" />
-          <span style={{ fontSize: '0.85rem' }}>🖱️</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{opacity:0.7}}>
+            <rect x="6" y="3" width="12" height="18" rx="6"/>
+            <line x1="12" y1="7" x2="12" y2="11"/>
+          </svg>
           <span className="hud-label">
             {lang === 'es' ? 'click en objetos para interactuar' : 'click objects to interact'}
           </span>

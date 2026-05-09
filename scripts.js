@@ -54,7 +54,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const navMain = document.getElementById('nav-main');
 
-  document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
+  document.querySelectorAll('[data-target]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.getElementById(btn.dataset.target);
       if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -143,10 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = container.querySelector('.carousel-track');
     if (!track) return;
 
-    track.innerHTML += track.innerHTML;
-    const shift = track.scrollWidth / 2;
+    const orig = track.innerHTML;
+    track.innerHTML = orig + orig + orig + orig; // 4 copies → no visible duplicates even on wide screens
+
+    const shift = track.scrollWidth / 4;
     track.style.setProperty('--shift', shift + 'px');
-    track.style.animation = 'slide 14s linear infinite';
+    track.style.animation = 'slide 10s linear infinite';
 
     container.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
     container.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-        track.style.setProperty('--shift', (track.scrollWidth / 2) + 'px');
+        track.style.setProperty('--shift', (track.scrollWidth / 4) + 'px');
       }, 200);
     });
   });
@@ -172,10 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = container.querySelector('.carousel-track');
     if (!track) return;
 
-    track.innerHTML += track.innerHTML;
-    const shift = track.scrollWidth / 2;
+    const orig = track.innerHTML;
+    track.innerHTML = orig + orig + orig + orig; // 4 copies
+
+    const shift = track.scrollWidth / 4;
     track.style.setProperty('--shift', shift + 'px');
-    track.style.animation = 'slide 16s linear infinite';
+    track.style.animation = 'slide 12s linear infinite';
 
     container.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
     container.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
@@ -184,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-        track.style.setProperty('--shift', (track.scrollWidth / 2) + 'px');
+        track.style.setProperty('--shift', (track.scrollWidth / 4) + 'px');
       }, 200);
     });
   });
