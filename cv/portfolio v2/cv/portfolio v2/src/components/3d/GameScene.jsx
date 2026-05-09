@@ -77,7 +77,7 @@ function NearHint({ charPos, zones, modalOpen }) {
   );
 }
 
-export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData }) {
+export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile, joystickRef, interactRef }) {
   const keys = useRef({});
   const charPos = useRef(new THREE.Vector3(0, 0, 0));
   const charRotY = useRef(0);
@@ -136,6 +136,8 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     }
     if (best) best.action();
   };
+  // Exponer el handler para el botón E móvil
+  if (interactRef) interactRef.current = eHandlerRef.current;
 
   useFrame(({ camera }, delta) => {
     const k = keys.current;
@@ -144,6 +146,14 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     if (k['KeyS'] || k['ArrowDown'])  dz += 1;
     if (k['KeyA'] || k['ArrowLeft'])  dx -= 1;
     if (k['KeyD'] || k['ArrowRight']) dx += 1;
+
+    // Joystick móvil — zona muerta del 12%
+    if (joystickRef) {
+      const { x: jx, y: jy } = joystickRef.current;
+      const dead = 0.12;
+      if (Math.abs(jx) > dead) dx += jx;
+      if (Math.abs(jy) > dead) dz += jy;
+    }
 
     const moving = dx !== 0 || dz !== 0;
     if (moving) {

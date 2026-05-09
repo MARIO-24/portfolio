@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { portfolioData } from './data/portfolioData';
 import { GameScene } from './components/3d/GameScene';
@@ -11,6 +11,15 @@ function App() {
   const [dark, setDark] = useState(false);
   const [outfit, setOutfit] = useState(0);
   const [modal, setModal] = useState({ open: true, type: 'presentation' });
+  const [isMobile, setIsMobile] = useState(
+    () => window.innerWidth <= 800 || /Mobi|Android/i.test(navigator.userAgent)
+  );
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 800 || /Mobi|Android/i.test(navigator.userAgent));
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const data = portfolioData[lang];
 
@@ -34,12 +43,18 @@ function App() {
     setOutfit((o) => (o + 1) % 8);
   }, []);
 
+  const joystickRef  = useRef({ x: 0, y: 0 });
+  const interactRef  = useRef(null); // GameScene escribe aquí su handler de E
+
   return (
     <div className={'app' + (dark ? ' dark' : '')}>
       <Canvas
-        shadows
-        camera={{ position: [6, 9, 9], fov: 50 }}
-        style={{ width: '100vw', height: '100vh' }}
+        shadows={!isMobile}
+        camera={{ position: [6, isMobile ? 7 : 9, isMobile ? 7 : 9], fov: isMobile ? 65 : 50 }}
+        dpr={isMobile ? 1 : Math.min(window.devicePixelRatio, 2)}
+        performance={{ min: 0.5 }}
+        gl={{ antialias: !isMobile, powerPreference: 'high-performance' }}
+        style={{ width: '100vw', height: '100vh', touchAction: 'none' }}
       >
         <GameScene
           dark={dark}
@@ -52,6 +67,9 @@ function App() {
           onClose={closeModal}
           modalOpen={modal.open}
           uiData={data.ui}
+          isMobile={isMobile}
+          joystickRef={joystickRef}
+          interactRef={interactRef}
         />
       </Canvas>
 
@@ -64,7 +82,7 @@ function App() {
         />
       )}
 
-      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} />
+      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} onInteract={() => interactRef.current?.()} />
     </div>
   );
 }
