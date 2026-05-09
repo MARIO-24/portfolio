@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
       'form.message.ph': 'Cuéntame tu proyecto o idea...',
       'form.send': 'Enviar mensaje',
       'btn3d.label': 'Vista 3D',
-      'btn3d.exit': 'Salir del 3D',
     },
     en: {
       'nav.about': 'About me',
@@ -242,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.removeAttribute('aria-hidden');
     btn.classList.add('active');
     if (icon)  { icon.className = 'fa-solid fa-xmark'; }
-    if (label) label.textContent = 'Salir';
     document.body.style.overflow = 'hidden';
     if (navMain) navMain.classList.remove('open');
   }
@@ -252,8 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.setAttribute('aria-hidden', 'true');
     btn.classList.remove('active');
     if (icon)  { icon.className = 'fa-solid fa-cube'; }
-    const lang3dLabel = document.querySelector('.btn-3d-label[data-i18n="btn3d.label"]');
-    if (label) label.textContent = lang3dLabel ? lang3dLabel.textContent : 'Vista 3D';
     document.body.style.overflow = '';
   }
 
