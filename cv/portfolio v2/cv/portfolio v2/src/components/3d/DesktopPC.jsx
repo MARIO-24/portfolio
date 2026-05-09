@@ -9,8 +9,8 @@ export function DesktopPC({ position, dark, label, onInteract }) {
   const kb    = dark ? '#222' : '#333';
 
   return (
-    <Interactive label={label} onInteract={onInteract}>
-      <group position={position}>
+    <Interactive label={label} onInteract={onInteract} position={position}>
+      <group>
         {/* Mesa */}
         <mesh position={[0, 0.78, 0]} castShadow receiveShadow>
           <boxGeometry args={[2.8, 0.1, 1.1]} />

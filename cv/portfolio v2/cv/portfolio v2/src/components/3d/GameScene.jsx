@@ -281,7 +281,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
       {/* Movil — tumbado en la segunda mesita */}
       <MobilePhone
         position={[5.0, 0.71, 1.7]}
-        rotation={[Math.PI / 2, Math.PI, Math.PI / 2]}
+        rotation={[-Math.PI / 2, 0, 0]}
         dark={dark}
         label={uiData.objects.mobile}
         onInteract={() => onInteract('social')}

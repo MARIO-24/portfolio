@@ -6,8 +6,8 @@ export function Laptop({ position, rotation, dark, label, onInteract }) {
   const scrnGlow = dark ? '#3366ff' : '#4488ff';
 
   return (
-    <Interactive label={label} onInteract={onInteract}>
-      <group position={position} rotation={rotation}>
+    <Interactive label={label} onInteract={onInteract} position={position} rotation={rotation}>
+      <group>
 
         {/* === Caos de papeles en el suelo === */}
 

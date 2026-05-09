@@ -10,8 +10,8 @@ export function Bookshelf({ position, dark, label, onInteract }) {
   const booksPerShelf = [6, 7, 6];
 
   return (
-    <Interactive label={label} onInteract={onInteract}>
-      <group position={position}>
+    <Interactive label={label} onInteract={onInteract} position={position} labelOffset={[0, 2.6, 0.6]}>
+      <group>
         {/* Panel lateral izquierdo */}
         <mesh position={[-0.6, 1.1, 0]} castShadow>
           <boxGeometry args={[0.08, 2.2, 0.5]} />

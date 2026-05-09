@@ -26,11 +26,11 @@ export function Room({ dark }) {
       ))}
 
       {/* Alfombra — zona central de la habitacion */}
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0.5, 0.003, 1.5]}>
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
         <planeGeometry args={[5, 4]} />
         <meshStandardMaterial color={rugColor} roughness={1} />
       </mesh>
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0.5, 0.004, 1.5]}>
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]}>
         <planeGeometry args={[4.4, 3.4]} />
         <meshStandardMaterial color={rugColor2} roughness={1} />
       </mesh>

@@ -6,8 +6,8 @@ export function LightSwitch({ position, dark, on, label, onInteract }) {
   const glow  = on ? '#ffe066' : 'transparent';
 
   return (
-    <Interactive label={label} onInteract={onInteract} hoverScale={1.1}>
-      <group position={position}>
+    <Interactive label={label} onInteract={onInteract} hoverScale={1.1} position={position} labelOffset={[0, 0.2, -0.8]}>
+      <group>
         {/* Placa */}
         <mesh castShadow>
           <boxGeometry args={[0.12, 0.2, 0.025]} />

@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 
 /** Wrapper interactivo reutilizable para objetos 3D */
-export function Interactive({ children, label, onInteract, hoverScale = 1.04, labelOffset = [0, 2.6, 0] }) {
+export function Interactive({ children, label, onInteract, hoverScale = 1.04, labelOffset = [0, 2.6, 0], position, rotation }) {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef();
 
@@ -19,6 +19,8 @@ export function Interactive({ children, label, onInteract, hoverScale = 1.04, la
   return (
     <group
       ref={groupRef}
+      position={position}
+      rotation={rotation}
       onClick={(e) => { e.stopPropagation(); onInteract(); }}
       onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
       onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
