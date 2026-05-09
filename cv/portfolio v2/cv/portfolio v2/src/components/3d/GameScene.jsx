@@ -122,7 +122,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     { pos: [ 4.5, 0,  0.3], range: 1.7, label: uiData.objects.bed,      action: () => onInteract('presentation') },
     { pos: [ 5.0, 0,  1.7], range: 1.4, label: uiData.objects.mobile,   action: () => onInteract('social') },
     { pos: [-5.35, 1.3, 0.5], range: 1.8, label: uiData.objects.light,  action: onDarkToggle },
-    { pos: [-5.35, 1.3, 1.4], range: 1.8, label: uiData.objects.poster, action: onLangToggle },
+    { pos: [-5.35, 1.3, 3.0], range: 1.8, label: uiData.objects.poster, action: onLangToggle },
   ];
 
   // Manejador de tecla E — siempre fresco
@@ -267,8 +267,8 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
         onInteract={() => onInteract('social')}
       />
 
-      {/* Interruptor — pared izquierda, separado del mapamundi */}
-      <group position={[-5.35, 1.3, -0.8]} rotation={[0, Math.PI / 2, 0]}>
+      {/* Interruptor — pared izquierda */}
+      <group position={[-5.35, 1.3, 0.5]} rotation={[0, Math.PI / 2, 0]}>
         <LightSwitch
           position={[0, 0, 0]}
           dark={dark}

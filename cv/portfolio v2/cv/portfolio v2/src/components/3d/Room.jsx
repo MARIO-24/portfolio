@@ -263,12 +263,12 @@ export function Room({ dark }) {
 
       {/* ===== POSTER MAPAMUNDI (pared izq) ===== */}
       {/* Marco de madera */}
-      <mesh position={[-5.44, 2.20, 1.90]}>
+      <mesh position={[-5.44, 2.20, 3.40]}>
         <boxGeometry args={[0.05, 0.96, 1.50]} />
         <meshStandardMaterial color={dark ? '#2a1e10' : '#5a3a18'} roughness={0.8} />
       </mesh>
       {/* Fondo — océano azul, bien separado del marco */}
-      <mesh position={[-5.41, 2.20, 1.90]}>
+      <mesh position={[-5.41, 2.20, 3.40]}>
         <boxGeometry args={[0.04, 0.86, 1.40]} />
         <meshStandardMaterial
           color={'#2255aa'}
@@ -278,22 +278,22 @@ export function Room({ dark }) {
         />
       </mesh>
       {/* Continente Europa/África */}
-      <mesh position={[-5.385, 2.22, 2.05]}>
+      <mesh position={[-5.385, 2.22, 3.55]}>
         <boxGeometry args={[0.04, 0.38, 0.22]} />
         <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
       </mesh>
       {/* Continente América */}
-      <mesh position={[-5.385, 2.16, 1.60]}>
+      <mesh position={[-5.385, 2.16, 3.10]}>
         <boxGeometry args={[0.04, 0.42, 0.18]} />
         <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
       </mesh>
       {/* Continente Asia */}
-      <mesh position={[-5.385, 2.30, 2.30]}>
+      <mesh position={[-5.385, 2.30, 3.80]}>
         <boxGeometry args={[0.04, 0.24, 0.34]} />
         <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
       </mesh>
       {/* Continente Oceanía */}
-      <mesh position={[-5.385, 1.98, 2.45]}>
+      <mesh position={[-5.385, 1.98, 3.95]}>
         <boxGeometry args={[0.04, 0.12, 0.14]} />
         <meshStandardMaterial color={'#3a9a28'} roughness={0.9} emissive={'#1a5a10'} emissiveIntensity={0.5} />
       </mesh>

@@ -95,21 +95,23 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
 
       {/* Botones arriba derecha — solo emoji en móvil */}
       <div className="hud-controls">
-        {isMobile && (
-          <button
-            className="hud-btn"
-            title="Salir del portfolio 3D"
-            onClick={() => { if (window.opener) { window.close(); } else { window.history.back(); } }}
-          >
-            🚪
-          </button>
-        )}
         <button className="hud-btn" onClick={onDarkToggle} title={dark ? 'Modo Claro' : 'Modo Oscuro'}>
           {isMobile ? (dark ? '☀️' : '🌙') : (dark ? '☀️ Modo Claro' : '🌙 Modo Oscuro')}
         </button>
         <button className="hud-btn" onClick={onLangToggle} title={data.ui.langToggle}>
           {isMobile ? (lang === 'es' ? '🇬🇧' : '🇪🇸') : data.ui.langToggle}
         </button>
+        {isMobile && (
+          <button
+            className="hud-btn"
+            title="Salir del portfolio 3D"
+            onClick={() => {
+              window.location.href = new URL('../', window.location.href).href;
+            }}
+          >
+            🚪
+          </button>
+        )}
       </div>
 
       {/* Desktop: hint WASD */}
