@@ -11,6 +11,7 @@ import { Bed } from './Bed';
 import { Wardrobe } from './Wardrobe';
 import { MobilePhone } from './MobilePhone';
 import { LightSwitch } from './LightSwitch';
+import { Interactive } from './Interactive';
 
 const CHAR_R = 0.45;
 
@@ -277,6 +278,20 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
           onInteract={onDarkToggle}
         />
       </group>
+
+      {/* Poster mapamundi — plano invisible clickeable sobre la pared izquierda */}
+      <Interactive
+        label={uiData.objects.poster}
+        onInteract={onLangToggle}
+        hoverScale={1.03}
+      >
+        <group position={[-5.38, 2.20, 2.50]} rotation={[0, Math.PI / 2, 0]}>
+          <mesh>
+            <planeGeometry args={[1.40, 0.86]} />
+            <meshStandardMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+        </group>
+      </Interactive>
     </>
   );
 }

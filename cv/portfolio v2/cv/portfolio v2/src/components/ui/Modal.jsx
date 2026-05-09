@@ -1,5 +1,32 @@
 import { useEffect } from 'react';
 
+/* ── Iconos SVG profesionales (estilo Lucide/Heroicons, stroke) ── */
+const S = ({ d, w = 20, h = 20, vb = '0 0 24 24', fill = 'none', sw = '2' }) => (
+  <svg viewBox={vb} width={w} height={h} fill={fill} stroke="currentColor"
+    strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round"
+    style={{ flexShrink: 0 }}>
+    {Array.isArray(d) ? d.map((p, i) => <path key={i} d={p} />) : <path d={d} />}
+  </svg>
+);
+
+const UI_ICONS = {
+  /* modal titles */
+  projects: <S d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" />,
+  personal: <S d={['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']} />,
+  tools:    <S d={['M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z']} />,
+  social:   <S d={['M22 2L11 13', 'M22 2L15 22l-4-9-9-4 20-7z']} />,
+  /* personal card labels */
+  user:     <S d={['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']} />,
+  briefcase:<S d={['M20 7H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z', 'M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2']} />,
+  calendar: <S d={['M8 2v4', 'M16 2v4', 'M3 10h18', 'M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z']} />,
+  mail:     <S d={['M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z', 'M22 6l-10 7L2 6']} />,
+  pin:      <S d={['M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z', 'M12 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z']} fill="currentColor" />,
+  /* tools section headers */
+  laptop:   <S d={['M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9', 'M2 16h20', 'M12 20h.01']} />,
+  settings: <S d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.22-1.78a6 6 0 0 0 .07-.79v-.86a6 6 0 0 0-.07-.79l1.7-1.33a.4.4 0 0 0 .1-.52l-1.62-2.8a.4.4 0 0 0-.49-.18l-2.01.81a6.1 6.1 0 0 0-1.37-.79l-.3-2.14A.39.39 0 0 0 14 3h-3.24a.39.39 0 0 0-.39.33l-.31 2.14c-.49.2-.94.47-1.37.79l-2-.81a.4.4 0 0 0-.49.18L4.58 8.23a.39.39 0 0 0 .1.52l1.7 1.33a6.1 6.1 0 0 0-.08.79v.86a6 6 0 0 0 .07.79L4.67 14a.4.4 0 0 0-.1.52l1.62 2.8c.1.18.3.24.49.18l2-.81c.43.32.88.59 1.37.79l.31 2.14c.05.19.22.33.4.33H14c.18 0 .35-.14.39-.33l.31-2.14c.49-.2.94-.47 1.37-.79l2.01.81c.18.07.38 0 .49-.18l1.61-2.8a.4.4 0 0 0-.09-.52l-1.67-1.32z" />,
+  code:     <S d={['M16 18l6-6-6-6', 'M8 6L2 12l6 6']} />,
+};
+
 const ICONS = {
   github: (
     <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
@@ -32,6 +59,17 @@ const ICONS = {
     </svg>
   ),
 };
+
+/* ── Helper para label con icono SVG ── */
+function Label({ icon, text }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.7 }}>
+      {icon}
+      <span>{text}</span>
+    </div>
+  );
+}
+
 
 export function Modal({ type, data, dark, onClose }) {
   useEffect(() => {
@@ -88,7 +126,9 @@ function PresentationContent({ data, onClose }) {
 function ProjectsContent({ data }) {
   return (
     <>
-      <div className="modal-title">{data.ui.sections.projects}</div>
+      <div className="modal-title" style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        {UI_ICONS.projects}{data.ui.sections.projects}
+      </div>
       <div className="projects-grid">
         {data.projects.map((p, i) => (
           <div key={i} className="project-card">
@@ -121,32 +161,34 @@ function PersonalContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">{ui.sections.personal}</div>
+      <div className="modal-title" style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        {UI_ICONS.personal}{ui.sections.personal}
+      </div>
       <div className="personal-grid">
         <div className="personal-card">
-          <div className="personal-card-label">Nombre</div>
+          <div className="personal-card-label"><S d={['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2','M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']} w={14} h={14}/>Nombre</div>
           <div className="personal-card-value">{p.nombre}</div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">Apellidos</div>
+          <div className="personal-card-label"><S d={['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2','M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z']} w={14} h={14}/>Apellidos</div>
           <div className="personal-card-value">{p.apellidos}</div>
         </div>
         <div className="personal-card personal-card--full">
-          <div className="personal-card-label">Rol</div>
+          <div className="personal-card-label"><S d={['M20 7H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z','M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2']} w={14} h={14}/>Rol</div>
           <div className="personal-card-value">{p.rol}</div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">Fecha de nacimiento</div>
+          <div className="personal-card-label"><S d={['M8 2v4','M16 2v4','M3 10h18','M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z']} w={14} h={14}/>Fecha de nacimiento</div>
           <div className="personal-card-value">{p.nacimiento}</div>
         </div>
         <div className="personal-card personal-card--full">
-          <div className="personal-card-label">Email</div>
+          <div className="personal-card-label"><S d={['M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z','M22 6l-10 7L2 6']} w={14} h={14}/>Email</div>
           <div className="personal-card-value">
             <a href={`mailto:${p.email}`} className="personal-email-link">{p.email}</a>
           </div>
         </div>
         <div className="personal-card">
-          <div className="personal-card-label">Ubicación</div>
+          <div className="personal-card-label"><S d={['M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z','M12 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z']} w={14} h={14} fill="currentColor"/>Ubicación</div>
           <div className="personal-card-value">{p.ubicacion}</div>
         </div>
       </div>
@@ -162,10 +204,12 @@ function ToolsContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">{ui.sections.tools}</div>
+      <div className="modal-title" style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        {UI_ICONS.tools}{ui.sections.tools}
+      </div>
 
       <div className="tools-section">
-        <div className="tools-section-title">IDEs &amp; Editores</div>
+        <div className="tools-section-title" style={{display:'flex',alignItems:'center',gap:'7px'}}><S d={['M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9','M2 16h20','M12 20h.01']} w={16} h={16}/>IDEs &amp; Editores</div>
         <div className="tools-grid">
           {tools.ides.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -177,7 +221,7 @@ function ToolsContent({ data }) {
       </div>
 
       <div className="tools-section">
-        <div className="tools-section-title">Frameworks &amp; Tecnologías</div>
+        <div className="tools-section-title" style={{display:'flex',alignItems:'center',gap:'7px'}}><S d={['M16 18l6-6-6-6','M8 6L2 12l6 6']} w={16} h={16}/>Frameworks &amp; Tecnologías</div>
         <div className="tools-grid">
           {tools.frameworks.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -189,7 +233,7 @@ function ToolsContent({ data }) {
       </div>
 
       <div className="tools-section">
-        <div className="tools-section-title">Lenguajes de Programación</div>
+        <div className="tools-section-title" style={{display:'flex',alignItems:'center',gap:'7px'}}><S d="M10 20l4-16M4 9l6 6-6 6M20 15l-6-6 6-6" w={16} h={16}/>Lenguajes de Programación</div>
         <div className="tools-grid">
           {tools.languages.map((t, i) => (
             <div key={i} className="tool-chip">
@@ -207,7 +251,9 @@ function SocialContent({ data }) {
   const ui = data.ui;
   return (
     <>
-      <div className="modal-title">{ui.sections.social}</div>
+      <div className="modal-title" style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        {UI_ICONS.social}{ui.sections.social}
+      </div>
       <div className="social-grid">
         {data.social.map((s, i) => (
           <a
