@@ -7,8 +7,8 @@ export function MobilePhone({ position, rotation, dark, label, onInteract }) {
   const btn    = dark ? '#222' : '#333';
 
   return (
-    <Interactive label={label} onInteract={onInteract} hoverScale={1.08} position={position} rotation={rotation} labelOffset={[-0.3, 0.8, 0]}>
-      <group>
+    <Interactive label={label} onInteract={onInteract} hoverScale={1.08} position={position} labelOffset={[-0.3, 0.8, 0]}>
+      <group rotation={rotation}>
         {/* Cuerpo */}
         <mesh castShadow>
           <boxGeometry args={[0.28, 0.58, 0.05]} />
