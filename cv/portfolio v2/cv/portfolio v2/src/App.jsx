@@ -1,10 +1,46 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, Component } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { portfolioData } from './data/portfolioData';
 import { GameScene } from './components/3d/GameScene';
 import { Modal } from './components/ui/Modal';
 import { HUD } from './components/ui/HUD';
 import './App.css';
+
+// ── Detección WebGL ──
+function hasWebGL() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext &&
+      (c.getContext('webgl') || c.getContext('experimental-webgl')));
+  } catch { return false; }
+}
+
+// ── Error Boundary ──
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e) { return { error: e }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ color:'#fff', background:'#0f0f1a', width:'100vw', height:'100vh',
+          display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+          gap:'1rem', padding:'2rem', textAlign:'center', fontFamily:'sans-serif' }}>
+          <div style={{ fontSize:'3rem' }}>⚠️</div>
+          <div style={{ fontSize:'1.2rem', fontWeight:'700' }}>Error al cargar el portfolio 3D</div>
+          <div style={{ fontSize:'0.9rem', color:'#aaa', maxWidth:'320px' }}>
+            {String(this.state.error?.message || this.state.error)}
+          </div>
+          <button onClick={() => window.location.reload()}
+            style={{ marginTop:'1rem', padding:'10px 24px', borderRadius:'50px',
+              background:'#6c63ff', color:'#fff', border:'none', fontWeight:'700', cursor:'pointer' }}>
+            Reintentar
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function App() {
   const [lang, setLang] = useState('es');
@@ -45,7 +81,22 @@ function App() {
 
   const joystickRef  = useRef({ x: 0, y: 0 });
 
+  if (!hasWebGL()) {
+    return (
+      <div style={{ color:'#fff', background:'#0f0f1a', width:'100vw', height:'100vh',
+        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+        gap:'1rem', padding:'2rem', textAlign:'center', fontFamily:'sans-serif' }}>
+        <div style={{ fontSize:'3rem' }}>🖥️</div>
+        <div style={{ fontSize:'1.2rem', fontWeight:'700' }}>WebGL no disponible</div>
+        <div style={{ fontSize:'0.9rem', color:'#aaa', maxWidth:'320px' }}>
+          Tu navegador no soporta WebGL. Prueba con Chrome o Firefox.
+        </div>
+      </div>
+    );
+  }
+
   return (
+    <ErrorBoundary>
     <div className={'app' + (dark ? ' dark' : '')}>
       <Canvas
         shadows={!isMobile}
@@ -82,6 +133,7 @@ function App() {
 
       <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} />
     </div>
+    </ErrorBoundary>
   );
 }
 

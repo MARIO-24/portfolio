@@ -497,7 +497,7 @@ header {
 .close-3d {
     position: absolute;
     top: 14px;
-    right: 20px;
+    left: 20px;
     z-index: 10001;
     background: rgba(108,99,255,0.85);
     color: #fff;

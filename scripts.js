@@ -19,7 +19,9 @@ menuToggle.addEventListener('click', () => {
     function open3D() {
         // En móvil: abrir en nueva pestaña para evitar problemas de WebGL en iframe
         if (isMobile) {
-            window.open(iframe.dataset.src, '_blank');
+            // Construir URL absoluta para evitar que window.open falle con relativas
+            const base = window.location.href.replace(/\/[^/]*$/, '/');
+            window.open(base + iframe.dataset.src, '_blank', 'noopener');
             return;
         }
         if (!loaded) {
