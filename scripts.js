@@ -416,17 +416,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function spawnBubbles(cx, cy) {
     const COUNT = 18;
+    const maxSpread = Math.min(90, window.innerWidth * 0.25);
     for (let i = 0; i < COUNT; i++) {
       const el = document.createElement('div');
       el.className = 'bubble-particle';
       const size = 10 + Math.random() * 24;
-      const xOff = (Math.random() - 0.5) * 200;
-      const rise = cy * (0.85 + Math.random() * 0.35); // reaches top of page
+      const xOff = (Math.random() - 0.5) * maxSpread * 2;
+      const rawX = cx + xOff - size / 2;
+      const clampedX = Math.max(0, Math.min(window.innerWidth - size, rawX));
+      const rise = cy * (0.85 + Math.random() * 0.35);
       const dur  = 1.8 + Math.random() * 0.9;
       const delay = Math.random() * 0.35;
       el.style.cssText = `
         width:${size}px; height:${size}px;
-        left:${cx + xOff - size / 2}px;
+        left:${clampedX}px;
         top:${cy - size / 2}px;
         background: ${BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)]};
         border: 1.5px solid rgba(255,255,255,0.35);
