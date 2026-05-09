@@ -419,6 +419,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastSoundTime = 0;
   const SOUND_COOLDOWN = 350;
 
+  // Mute
+  let muted = localStorage.getItem('soundMuted') === 'true';
+  const muteBtn  = document.getElementById('mute-toggle');
+  const muteIcon = document.getElementById('mute-icon');
+  function applyMuteUI() {
+    if (muted) {
+      muteBtn.classList.add('muted');
+      muteIcon.className = 'fa-solid fa-volume-xmark';
+    } else {
+      muteBtn.classList.remove('muted');
+      muteIcon.className = 'fa-solid fa-volume-high';
+    }
+  }
+  applyMuteUI();
+  muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    localStorage.setItem('soundMuted', muted);
+    applyMuteUI();
+  });
+
   function getCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -441,6 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('touchstart', loadThunder, { once: true });
 
   function playBubbleSound() {
+    if (muted) return;
     if (Date.now() - lastSoundTime < SOUND_COOLDOWN) return;
     lastSoundTime = Date.now();
     try {
@@ -465,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playThunderSound() {
+    if (muted) return;
     if (Date.now() - lastSoundTime < SOUND_COOLDOWN) return;
     lastSoundTime = Date.now();
     try {
