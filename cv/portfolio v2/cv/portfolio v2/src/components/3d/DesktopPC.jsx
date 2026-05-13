@@ -76,7 +76,7 @@ export function DesktopPC({ position, dark, label, onInteract }) {
         {/* Teclas (decorativas) */}
         {Array.from({ length: 3 }, (_, row) =>
           Array.from({ length: 8 }, (_, col) => (
-            <mesh key={`${row}-${col}`} position={[-0.28 + col * 0.08, 0.855, 0.22 + row * 0.07]}>
+            <mesh key={`${row}-${col}`} position={[-0.08 + col * 0.08, 0.855, 0.22 + row * 0.07]}>
               <boxGeometry args={[0.065, 0.01, 0.055]} />
               <meshStandardMaterial color={dark ? '#333' : '#444'} />
             </mesh>

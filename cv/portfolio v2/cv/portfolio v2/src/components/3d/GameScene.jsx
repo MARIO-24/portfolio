@@ -12,6 +12,8 @@ import { Wardrobe } from './Wardrobe';
 import { MobilePhone } from './MobilePhone';
 import { LightSwitch } from './LightSwitch';
 import { Interactive } from './Interactive';
+import { Turntable } from './Turntable';
+import { VinylRecords } from './VinylRecords';
 
 const CHAR_R = 0.45;
 
@@ -29,6 +31,7 @@ const OBSTACLES = [
   [ 4.7,  5.3,   1.4,   2.0], // mesilla 2 (pie)
   [ 0.85, 1.45, -3.2,  -2.7 ], // papelera
   [-5.1,  -4.3, -4.1,  -3.3 ], // lampara retro
+  [ 3.05,  3.95,  3.35,  4.25], // tocadiscos
 ];
 
 function checkCollision(x, z) {
@@ -56,6 +59,7 @@ const ICO = {
   send:    S16(['M22 2L11 13','M22 2L15 22l-4-9-9-4 20-7z']),
   sun:     S16(['M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z','M12 1v2','M12 21v2','M4.22 4.22l1.42 1.42','M18.36 18.36l1.42 1.42','M1 12h2','M21 12h2','M4.22 19.78l1.42-1.42','M18.36 5.64l1.42-1.42']),
   globe:   S16(['M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z','M2 12h20','M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z']),
+  music:   S16(['M9 18V5l12-2v13','M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z','M18 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z']),
 };
 
 // Indicador flotante "Pulsa E" sobre el personaje cuando está cerca de un objeto
@@ -97,7 +101,7 @@ function NearHint({ charPos, zones, modalOpen }) {
   );
 }
 
-export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile, joystickRef }) {
+export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDarkToggle, onOutfitToggle, onClose, modalOpen, uiData, isMobile, joystickRef, playFootstep, playInteract, startMusic, musicOn, toggleMusic, muted }) {
   const keys = useRef({});
   const charPos = useRef(new THREE.Vector3(0, 0, 0));
   const charRotY = useRef(0);
@@ -116,6 +120,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
   useEffect(() => {
     const down = (e) => {
       keys.current[e.code] = true;
+      startMusic?.();
       if (e.code === 'KeyE') {
         if (modalOpenRef.current) {
           onCloseRef.current?.();
@@ -143,6 +148,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
     { pos: [ 5.0, 0,  1.7], range: 1.4, label: uiData.objects.mobile,   icon: ICO.send,    action: () => onInteract('social') },
     { pos: [-5.35, 1.3, 0.5], range: 1.8, label: uiData.objects.light,  icon: ICO.sun,     action: onDarkToggle },
     { pos: [-5.35, 1.3, 2.0], range: 1.8, label: uiData.objects.poster, icon: ICO.globe,   action: onLangToggle },
+    { pos: [ 3.5,  0,   3.8], range: 1.8, label: uiData.objects.turntable, icon: ICO.music, action: toggleMusic },
   ];
 
   // Manejador de tecla E — siempre fresco
@@ -154,7 +160,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
       const d = Math.sqrt(dx * dx + dz * dz);
       if (d < z.range && d < bestDist) { bestDist = d; best = z; }
     }
-    if (best) best.action();
+    if (best) { best.action(); playInteract?.(); }
   };
 
   useFrame(({ camera }, delta) => {
@@ -175,6 +181,7 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
 
     const moving = dx !== 0 || dz !== 0;
     if (moving) {
+      playFootstep?.();
       const len = Math.sqrt(dx * dx + dz * dz);
       dx /= len; dz /= len;
       const speed = 3.5;
@@ -338,6 +345,21 @@ export function GameScene({ dark, lang, outfit, onInteract, onLangToggle, onDark
           </mesh>
         </Interactive>
       </group>
+
+      {/* Tocadiscos — esquina delantera derecha, con hover label y animación de escala */}
+      <Interactive
+        label={uiData.objects.turntable}
+        onInteract={toggleMusic}
+        hoverScale={1.04}
+        labelOffset={[0, 1.1, 0]}
+        position={[3.5, 0, 3.8]}
+        rotation={[0, -Math.PI * 0.25, 0]}
+      >
+        <Turntable dark={dark} musicOn={musicOn && !muted} />
+      </Interactive>
+
+      {/* Vinilos en el suelo detrás del tocadisco, cerca de la esquina */}
+      <VinylRecords position={[4.5, 0, 2.5]} />
     </>
   );
 }

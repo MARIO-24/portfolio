@@ -4,6 +4,7 @@ import { portfolioData } from './data/portfolioData';
 import { GameScene } from './components/3d/GameScene';
 import { Modal } from './components/ui/Modal';
 import { HUD } from './components/ui/HUD';
+import { useGameAudio } from './hooks/useGameAudio';
 import './App.css';
 
 // ── Detección WebGL ──
@@ -102,6 +103,7 @@ function App() {
   }, []);
 
   const joystickRef  = useRef({ x: 0, y: 0 });
+  const { muted, toggleMute, musicOn, toggleMusic, startMusic, playFootstep, playInteract } = useGameAudio();
 
   if (!hasWebGL()) {
     return (
@@ -141,6 +143,12 @@ function App() {
           uiData={data.ui}
           isMobile={isMobile}
           joystickRef={joystickRef}
+          playFootstep={playFootstep}
+          playInteract={playInteract}
+          startMusic={startMusic}
+          musicOn={musicOn}
+          toggleMusic={toggleMute}
+          muted={muted}
         />
       </Canvas>
 
@@ -153,7 +161,7 @@ function App() {
         />
       )}
 
-      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} />
+      <HUD dark={dark} lang={lang} data={data} onLangToggle={toggleLang} onDarkToggle={toggleDark} isMobile={isMobile} joystickRef={joystickRef} musicOn={musicOn} onMusicToggle={toggleMute} muted={muted} />
     </div>
     </ErrorBoundary>
   );

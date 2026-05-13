@@ -54,10 +54,9 @@ export const portfolioData = {
     ],
     social: [
       { nombre: "GitHub", url: "https://github.com/MARIO-24", icon: "github", color: "#24292e", bg: "#f6f8fa" },
-      { nombre: "LinkedIn", url: "https://www.linkedin.com/in/mario-sanchez-rufino-6946a01aa/", icon: "linkedin", color: "#fff", bg: "#0077b5" },
+      { nombre: "LinkedIn", url: "https://www.linkedin.com/in/mario-s%C3%A1nchez-rufino-6946a01aa/", icon: "linkedin", color: "#fff", bg: "#0077b5" },
       { nombre: "Instagram", url: "https://www.instagram.com/rufitodeveloper/", icon: "instagram", color: "#fff", bg: "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" },
       { nombre: "Twitter / X", url: "https://x.com/RufitoDeveloper", icon: "twitter", color: "#fff", bg: "#000" },
-      { nombre: "Infojobs", url: "https://www.infojobs.net/", icon: "infojobs", color: "#fff", bg: "#164194" },
     ],
     ui: {
       welcome: "Bienvenido a mi Portfolio Interactivo",
@@ -66,6 +65,8 @@ export const portfolioData = {
       close: "Cerrar",
       download: "Descargar CV",
       langToggle: "Switch to English",
+      darkOn: "Modo Claro",
+      darkOff: "Modo Oscuro",
       objects: {
         pc: "Proyectos",
         laptop: "Info Personal",
@@ -75,6 +76,7 @@ export const portfolioData = {
         poster:   "Idioma",
         mobile: "Redes Sociales",
         light: "Luz",
+        turntable: "Música",
       },
       sections: {
         projects: "Mis Proyectos",
@@ -154,10 +156,9 @@ export const portfolioData = {
     ],
     social: [
       { nombre: "GitHub", url: "https://github.com/MARIO-24", icon: "github", color: "#24292e", bg: "#f6f8fa" },
-      { nombre: "LinkedIn", url: "https://www.linkedin.com/in/mario-sanchez-rufino-6946a01aa/", icon: "linkedin", color: "#fff", bg: "#0077b5" },
+      { nombre: "LinkedIn", url: "https://www.linkedin.com/in/mario-s%C3%A1nchez-rufino-6946a01aa/", icon: "linkedin", color: "#fff", bg: "#0077b5" },
       { nombre: "Instagram", url: "https://www.instagram.com/rufitodeveloper/", icon: "instagram", color: "#fff", bg: "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" },
       { nombre: "Twitter / X", url: "https://x.com/RufitoDeveloper", icon: "twitter", color: "#fff", bg: "#000" },
-      { nombre: "Infojobs", url: "https://www.infojobs.net/", icon: "infojobs", color: "#fff", bg: "#164194" },
     ],
     ui: {
       welcome: "Welcome to my Interactive Portfolio",
@@ -166,6 +167,8 @@ export const portfolioData = {
       close: "Close",
       download: "Download CV",
       langToggle: "Cambiar a Español",
+      darkOn: "Light Mode",
+      darkOff: "Dark Mode",
       objects: {
         pc: "Projects",
         laptop: "Personal Info",
@@ -175,6 +178,7 @@ export const portfolioData = {
         poster:   "Language",
         mobile: "Social Media",
         light: "Light",
+        turntable: "Music",
       },
       sections: {
         projects: "My Projects",
