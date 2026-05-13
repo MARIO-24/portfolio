@@ -102,7 +102,7 @@ export function Modal({ type, data, dark, onClose }) {
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-box">
-        <button className="modal-close" onClick={onClose} aria-label="Cerrar">✕</button>
+        <button className="modal-close" onClick={onClose} aria-label={data.ui.close}>✕</button>
         {renderContent()}
       </div>
     </div>

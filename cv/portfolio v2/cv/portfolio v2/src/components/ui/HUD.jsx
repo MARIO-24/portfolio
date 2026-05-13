@@ -127,7 +127,7 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
         {isMobile && (
           <button
             className="hud-btn"
-            title="Salir del portfolio 3D"
+            title={data.ui.exitBtn}
             onClick={() => {
               window.location.href = new URL('../', window.location.href).href;
             }}
@@ -137,6 +137,7 @@ export function HUD({ dark, lang, data, onLangToggle, onDarkToggle, isMobile, jo
               <polyline points="16 17 21 12 16 7"/>
               <line x1="21" y1="12" x2="9" y2="12"/>
             </svg>
+            <span style={{marginLeft:4}}>{data.ui.exitBtn}</span>
           </button>
         )}
       </div>
